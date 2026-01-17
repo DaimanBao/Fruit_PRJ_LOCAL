@@ -1,0 +1,84 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Trang chủ";
+}
+
+<div class="container py-4">
+
+    <div class="p-5 mb-4 bg-light rounded-3 border">
+        <div class="container-fluid py-5">
+            <h1 class="display-5 fw-bold text-success">Trái Cây Tươi Ngon Mỗi Ngày</h1>
+            <p class="col-md-8 fs-4">Mang hương vị thiên nhiên đến ngôi nhà của bạn. Cam kết 100% hữu cơ, an toàn vệ sinh thực phẩm và giao hàng nhanh chóng trong 2h.</p>
+            <a href="#san-pham" class="btn btn-success btn-lg" type="button">Mua Ngay</a>
+        </div>
+    </div>
+
+    <div class="row align-items-md-stretch mb-5">
+        <div class="col-md-4">
+            <div class="h-100 p-4 text-white bg-success rounded-3">
+                <h2>Tươi 100%</h2>
+                <p>Trái cây được thu hoạch và vận chuyển ngay trong ngày để đảm bảo độ tươi ngon nhất.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="h-100 p-4 bg-light border rounded-3">
+                <h2>Giao Hàng Nhanh</h2>
+                <p>Đội ngũ shipper chuyên nghiệp, cam kết giao hàng nội thành chỉ trong vòng 2 giờ.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="h-100 p-4 bg-light border rounded-3">
+                <h2>Đổi Trả Miễn Phí</h2>
+                <p>Nếu không hài lòng về chất lượng, chúng tôi hỗ trợ đổi trả ngay lập tức không mất phí.</p>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="san-pham" class="mb-4">
+        <h2 class="pb-2 border-bottom mb-4 text-center text-uppercase text-secondary">Sản Phẩm Nổi Bật</h2>
+
+        <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4">
+            @foreach (var product in Model.products)
+            {
+                <div class="col">
+                    <div class="card h-100 shadow-sm">
+                        <img src="" class="card-img-top" alt="Táo Đỏ" style="height: 200px; object-fit: cover;">
+                        <div class="card-body">
+                            <h5 class="card-title text-success">@product.Name</h5>
+                            <p class="card-text text-muted">@product.Description</p>
+                            <h6 class="text-danger fw-bold">@product.Price / @product.Unit.Name</h6>
+                        </div>
+                        <div class="card-footer bg-transparent border-top-0 d-grid gap-2">
+                            <form method="post">
+                                <input type="hidden" name="productId" value="1" />
+                                <button type="submit" class="btn btn-outline-success w-100">
+                                    Thêm vào giỏ
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            }
+            
+
+           
+
+        </div>
+    </div>
+
+    <div class="bg-light border rounded-3 p-5 mt-5 text-center">
+        <h3>Đăng ký nhận ưu đãi</h3>
+        <p class="mb-4">Nhận ngay mã giảm giá 10% cho đơn hàng đầu tiên của bạn.</p>
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <form method="post" class="d-flex gap-2">
+                    <input type="email" class="form-control" placeholder="Nhập email của bạn..." required name="email">
+                    <button type="submit" asp-page-handler="Subscribe" class="btn btn-success text-nowrap">Đăng ký</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>

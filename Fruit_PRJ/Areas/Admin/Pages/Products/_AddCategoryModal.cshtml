@@ -1,0 +1,24 @@
+﻿@model IndexModel
+
+<form method="post" asp-page-handler="AddCategory">
+    <div class="modal fade" id="AddCategoryModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-info text-white">
+                    <h5 class="modal-title"><i class="fa-solid fa-folder-plus me-2"></i>Thêm Danh Mục</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">Tên danh mục</label>
+                        <input type="text" asp-for="newCategory.Name" class="form-control" placeholder="Ví dụ: Trái cây sấy khô">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Đóng</button>
+                    <button type="submit" class="btn btn-info text-white">Lưu danh mục</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

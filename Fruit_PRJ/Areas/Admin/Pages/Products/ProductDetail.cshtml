@@ -1,0 +1,207 @@
+﻿@page "/products-detail/{id:int?}"
+@model Fruit_Store_PRJ.Areas.Admin.Pages.Products.ProductDetailModel
+@{
+    ViewData["Title"] = "Chi tiết sản phẩm";
+    var product = Model.product;
+}
+
+@if (Model.product == null)
+{
+    <div class="alert alert-danger">
+        Không tìm thấy sản phẩm.
+    </div>
+    return;
+}
+
+
+<div class="mb-3">
+    <a asp-page="Index" class="btn btn-sm btn-outline-secondary border-0 ps-0">
+        <i class="fa-solid fa-arrow-left me-1"></i> Quay lại danh sách
+    </a>
+</div>
+
+<div class="card border-0 shadow-sm rounded-3 overflow-hidden">
+    <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center border-bottom">
+        <h5 class="m-0 fw-bold text-success">
+            <i class="fa-solid fa-circle-info me-2"></i>Thông tin chi tiết: @product.Name
+        </h5>    
+            @{
+                var statusClass = string.IsNullOrEmpty(Model.statusClass) ? "secondary" : Model.statusClass;
+            }
+            <div class="badge bg-@statusClass-subtle text-@statusClass">
+                @Model.statusText
+        </div>
+    </div>
+
+    <div class="card-body p-4">
+        <div class="row g-5">
+            <div class="col-md-4 text-center border-end">
+                @{
+                    var mainImage = product?.ProductImages?.FirstOrDefault(i => i.IsMain);
+                }
+
+                <div class="p-3 border rounded-3 bg-light mb-3">
+                    <img src="@(mainImage?.ImageUrl ?? "https://placehold.co/400x400")"
+                         class="img-fluid rounded shadow-sm"
+                         alt="@product?.Name">
+                </div>
+
+                <div class="row g-2">
+                    @foreach (var img in product.ProductImages)
+                    {
+                        <div class="col-4">
+                            <form method="post" asp-page-handler="SetMainImage">
+                                <input type="hidden" name="productId" value="@product.Id" />
+                                <input type="hidden" name="imageId" value="@img.Id" />
+
+                                <button type="submit"
+                                        class="border-0 p-0 bg-transparent w-100 position-relative">
+
+                                    <img src="@img.ImageUrl"
+                                         class="img-thumbnail @(img.IsMain ? "border-success border-3" : "")"
+                                         alt="@product.Name">
+
+                                    @if (img.IsMain)
+                                    {
+                                        <span class="position-absolute top-0 start-0 badge bg-success">
+                                            Ảnh chính
+                                        </span>
+                                    }
+                                </button>
+                            </form>
+                        </div>
+                    }
+                </div>
+
+
+                <div class="mt-4 p-3 bg-light rounded-3 text-start">
+                    <div class="mb-2">
+                        <label class="small text-muted d-block italic"><i class="fa-solid fa-calendar-plus me-1"></i>Ngày tạo sản phẩm:</label>
+                        <span class="small fw-bold text-dark">@product.CreatedAt</span>
+                    </div>
+                    <div>
+                        <label class="small text-muted d-block italic"><i class="fa-solid fa-clock-rotate-left me-1"></i>Cập nhật lần cuối:</label>
+                        <span class="small fw-bold text-primary">@product.UpdatedAt</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-8">
+                <div class="row g-4">
+                    <div class="col-sm-6">
+                        <label class="small text-muted d-block text-uppercase fw-bold" style="font-size: 0.7rem;">Mã sản phẩm</label>
+                        <span class="fw-bold fs-5">@product.Sku</span>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="small text-muted d-block text-uppercase fw-bold" style="font-size: 0.7rem;">Danh mục</label>
+                        <span class="badge bg-light text-dark border">@product.Category?.Name</span>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label class="small text-muted d-block text-uppercase fw-bold" style="font-size: 0.7rem;">Giá bán niêm yết</label>
+                        <span class="h4 text-danger fw-bold">@product.Price / @product.Unit?.Name</span>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="small text-muted d-block text-uppercase fw-bold" style="font-size: 0.7rem;">Số lượng kho</label>
+                        <span class="h4 fw-bold text-dark">@product.Stock <small class="text-muted fw-normal">@product.Unit?.Name</small></span>
+                    </div>
+
+                    <div class="col-12">
+                        <hr class="my-2 text-muted opacity-25">
+                    </div>
+
+                    <div class="col-12">
+                        <label class="small text-muted d-block text-uppercase fw-bold mb-1" style="font-size: 0.7rem;">Thông tin xuất xứ</label>
+                        <div class="d-flex align-items-start p-2 border rounded-3 bg-white shadow-sm">
+                            <div class="bg-success-subtle text-success rounded-circle p-2 me-3">
+                                <i class="fa-solid fa-map-location-dot fs-5"></i>
+                            </div>
+                            <div class="fw-bold text-dark">@product.Origin?.Name</div>                            
+                        </div>
+                    </div>
+
+                    <div class="col-12 text-center my-1">
+                        <div class="badge bg-light text-muted fw-normal px-4 border-start border-end">Thông tin bổ sung</div>
+                    </div>
+
+                    <div class="col-12">
+                        <label class="small text-muted d-block mb-1 text-uppercase fw-bold" style="font-size: 0.7rem;">Mô tả sản phẩm</label>
+                        <div class="p-3 bg-light rounded-3 text-secondary" style="line-height: 1.6;">
+                           @product.Description
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-5 d-flex justify-content-between align-items-end">
+                    <div class="d-flex gap-3">
+                        <button type="button" class="btn btn-primary px-5 shadow-sm" data-bs-toggle="modal" data-bs-target="#EditProductModal">
+                            <i class="fa-solid fa-pen-to-square me-2"></i>Chỉnh sửa
+                        </button>
+
+                        <form method="post" asp-page-handler="ChangeStatus">
+                            <input type="hidden" name="id" value="@Model.product.Id" />
+
+                            <div class="btn-group shadow-sm">
+                                <button type="button"
+                                        class="btn btn-outline-warning dropdown-toggle"
+                                        data-bs-toggle="dropdown"
+                                        aria-expanded="false">
+                                    <i class="fa-solid fa-arrows-rotate me-2"></i>
+                                    Trạng thái: @Model.statusText
+                                </button>
+
+                                <ul class="dropdown-menu shadow border-0">
+                                    <li>
+                                        <button class="dropdown-item py-2"
+                                                type="submit"
+                                                name="status"
+                                                value="1">
+                                            <i class="fa-solid fa-circle-check me-2 text-success"></i>
+                                            Đang bán
+                                        </button>
+                                    </li>
+
+                                    <li>
+                                        <button class="dropdown-item py-2"
+                                                type="submit"
+                                                name="status"
+                                                value="2">
+                                            <i class="fa-solid fa-circle-exclamation me-2 text-warning"></i>
+                                            Hết hàng
+                                        </button>
+                                    </li>
+
+                                    <li>
+                                        <button class="dropdown-item py-2"
+                                                type="submit"
+                                                name="status"
+                                                value="3">
+                                            <i class="fa-solid fa-circle-minus me-2 text-danger"></i>
+                                            Ngừng kinh doanh
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (TempData["Message"] != null)
+{
+    <div class="offcanvas offcanvas-end show" tabindex="-1" id="offcanvas" aria-labelledby="offcanvasLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasLabel">Thông báo</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            @Model.Message
+        </div>
+    </div>
+}
+
+@await Html.PartialAsync("_EditProductModal")

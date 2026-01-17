@@ -1,0 +1,169 @@
+﻿@model ProductDetailModel
+
+    <div class="modal fade" id="EditProductModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title"><i class="fa-solid fa-apple-whole me-2"></i>Sửa Sản Phẩm Mới</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body px-4">
+                    <form method="post" asp-page-handler="EditProduct" class="row g-3" enctype="multipart/form-data">
+                         <input type="hidden" asp-for="EditProduct.Id" />
+
+                        <div class="col-md-8">
+                            <label class="form-label small fw-bold text-muted">Tên sản phẩm</label>
+                            <input type="text" asp-for="EditProduct.Name" class="form-control shadow-none" placeholder="Ví dụ: Nho mẫu đơn">
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label small fw-bold text-muted">Mã sản phẩm (SKU)</label>
+                            <input type="text" asp-for="EditProduct.Sku" class="form-control shadow-none font-monospace" placeholder="Ví dụ: FR-001">
+                            <div class="form-text" style="font-size: 0.7rem;">Mã quản lý riêng, không phải ID hệ thống.</div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted">Danh mục</label>
+                            <select class="form-select shadow-none" asp-for="EditProduct.CategoryId">
+                                @foreach (var category in Model.categories)
+                                {
+                                    <option value="@category.Id">@category.Name</option>
+                                }
+                            </select>
+
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted">Xuất xứ</label>
+                            <select class="form-select shadow-none" asp-for="EditProduct.OriginId">
+                                @foreach(var origin in Model.origins)
+                                {
+                                    <option value="@origin.Id">@origin.Name</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label small fw-bold text-muted">Đơn vị tính</label>
+                            <select class="form-select shadow-none" asp-for="EditProduct.UnitId">
+                                @foreach( var unit in Model.units)
+                                {
+                                    <option value="@unit.Id">@unit.Name</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label small fw-bold text-muted">Giá bán (VNĐ)</label>
+                            <div class="input-group">
+                                <input type="number" asp-for="EditProduct.Price" class="form-control shadow-none" placeholder="0">
+                                <span class="input-group-text">đ</span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label small fw-bold text-muted">Số lượng kho</label>
+                            <input type="number" asp-for="EditProduct.Stock" class="form-control shadow-none" placeholder="0">
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label small fw-bold text-muted">Mô tả chi tiết</label>
+                            <textarea class="form-control shadow-none" asp-for="EditProduct.Description" rows="3" placeholder="Nhập đặc điểm nổi bật, hương vị..."></textarea>
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label small fw-bold text-muted">Hình ảnh sản phẩm (Chọn nhiều file)</label>
+                            <div class="input-group border rounded-2 overflow-hidden">
+                                <span class="input-group-text bg-white border-0"><i class="fa-solid fa-images text-muted"></i></span>
+                                <input type="file" class="form-control border-0 shadow-none" asp-for="NewImages" id="productImages" multiple accept="image/*">
+                            </div>
+                            <div id="imagePreviewContainer" class="d-flex flex-wrap gap-2 mt-2">
+                            </div>
+                        </div>
+                        <div class="modal-footer bg-light border-top-0 px-4">
+                            <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Hủy</button>
+                            <button type="submit" class="btn btn-success px-4 shadow-sm">
+                                <i class="fa-solid fa-save me-1"></i> Lưu sản phẩm
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<style>
+    .preview-wrapper {
+        position: relative;
+        width: 90px;
+        height: 90px;
+    }
+
+        .preview-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+
+    .remove-image {
+        position: absolute;
+        top: -6px;
+        right: -6px;
+        background: #dc3545;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 22px;
+        height: 22px;
+        font-size: 12px;
+        cursor: pointer;
+    }
+</style>
+
+<script>
+    const input = document.getElementById('productImages');
+    const previewContainer = document.getElementById('imagePreviewContainer');
+
+    let selectedFiles = [];
+
+    input.addEventListener('change', function () {
+        selectedFiles = Array.from(input.files);
+        renderPreview();
+    });
+
+    function renderPreview() {
+        previewContainer.innerHTML = "";
+
+        const dataTransfer = new DataTransfer();
+
+        selectedFiles.forEach((file, index) => {
+            dataTransfer.items.add(file);
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const wrapper = document.createElement('div');
+                wrapper.classList.add('preview-wrapper');
+
+                wrapper.innerHTML = `
+                    <img src="${e.target.result}">
+                    <button type="button"
+                            class="remove-image"
+                            onclick="removeImage(${index})">×</button>
+                `;
+
+                previewContainer.appendChild(wrapper);
+            };
+            reader.readAsDataURL(file);
+        });
+
+        input.files = dataTransfer.files;
+    }
+
+    function removeImage(index) {
+        selectedFiles.splice(index, 1);
+        renderPreview();
+    }
+</script>
+

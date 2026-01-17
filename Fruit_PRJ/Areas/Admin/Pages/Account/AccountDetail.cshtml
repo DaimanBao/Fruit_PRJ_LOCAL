@@ -1,0 +1,198 @@
+﻿@page
+@model Fruit_PRJ.Areas.Admin.Pages.Account.AccountDetailModel
+@{
+    ViewData["Title"] = "Chi tiết Tài khoản";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <a asp-page="Index" class="btn btn-sm btn-outline-secondary shadow-sm">
+        <i class="fa-solid fa-chevron-left me-1"></i> Quay lại danh sách
+    </a>
+    <div class="d-flex gap-2">
+        <button class="btn btn-sm btn-outline-danger px-3">
+            <i class="fa-solid fa-user-lock me-1"></i> Khóa tài khoản
+        </button>
+        <button class="btn btn-sm btn-primary px-3 shadow-sm">
+            <i class="fa-solid fa-floppy-disk me-1"></i> Lưu thay đổi
+        </button>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-4">
+        <div class="card border-0 shadow-sm mb-4 text-center overflow-hidden">
+            <div class="bg-success" style="height: 60px;"></div>
+            <div class="card-body pt-0" style="margin-top: -40px;">
+                <div class="position-relative d-inline-block mb-3">
+                    <img src="https://ui-avatars.com/api/?name=Le+Quan&background=0D6EFD&color=fff&size=128"
+                         class="rounded-circle shadow border border-4 border-white" width="100" height="100">
+                    <span class="position-absolute bottom-0 end-0 bg-success border border-2 border-white rounded-circle p-2" title="Đang hoạt động"></span>
+                </div>
+                <h5 class="fw-bold mb-1">Lê Văn Quân</h5>
+                <span class="badge bg-danger-subtle text-danger px-3 py-2 rounded-pill border border-danger mb-3">Administrator</span>
+
+                <div class="row g-2 mt-2">
+                    <div class="col-6">
+                        <div class="p-2 bg-light rounded-3 text-start">
+                            <div class="text-muted" style="font-size: 0.65rem;">NGÀY TẠO</div>
+                            <div class="fw-bold small">10/01/2026</div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="p-2 bg-light rounded-3 text-start">
+                            <div class="text-muted" style="font-size: 0.65rem;">TRẠNG THÁI</div>
+                            <div class="fw-bold small text-success">Hoạt động</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <h6 class="fw-bold text-uppercase small mb-3 text-secondary">Thông tin liên hệ</h6>
+                <div class="mb-3">
+                    <label class="text-muted small d-block">Địa chỉ Email</label>
+                    <span class="fw-bold small">quanlv@fruitfresh.com</span>
+                </div>
+                <div class="mb-3">
+                    <label class="text-muted small d-block">Số điện thoại</label>
+                    <span class="fw-bold small">098.765.4321</span>
+                </div>
+                <div class="mb-0">
+                    <label class="text-muted small d-block">Địa chỉ đăng ký</label>
+                    <span class="fw-bold small">Quy Nhơn, Bình Định</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-header bg-white py-3 border-bottom-0">
+                <ul class="nav nav-pills card-header-pills border-0" id="accountTab" role="tablist">
+                    <li class="nav-item">
+                        <button class="nav-link active fw-bold small" data-bs-toggle="tab" data-bs-target="#profile">
+                            <i class="fa-solid fa-user-gear me-2"></i>Hồ sơ chi tiết
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link fw-bold small" data-bs-toggle="tab" data-bs-target="#security">
+                            <i class="fa-solid fa-shield-halved me-2"></i>Bảo mật & Quyền
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link fw-bold small" data-bs-toggle="tab" data-bs-target="#activity">
+                            <i class="fa-solid fa-clock-rotate-left me-2"></i>Lịch sử đăng nhập
+                        </button>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="card-body">
+                <div class="tab-content" id="accountTabContent">
+                    <div class="tab-pane fade show active" id="profile">
+                        <form class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Họ và tên</label>
+                                <input type="text" class="form-control form-control-sm shadow-none" value="Lê Văn Quân">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Vai trò hệ thống</label>
+                                <select class="form-select form-select-sm shadow-none">
+                                    <option selected>Admin</option>
+                                    <option>Staff</option>
+                                    <option>Customer</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Email đăng nhập</label>
+                                <input type="email" class="form-control form-control-sm shadow-none" value="quanlv@fruitfresh.com">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Số điện thoại</label>
+                                <input type="text" class="form-control form-control-sm shadow-none" value="0987654321">
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="tab-pane fade" id="security">
+                        <h6 class="fw-bold small mb-3">Đổi mật khẩu nhanh</h6>
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <input type="password" class="form-control form-control-sm shadow-none" placeholder="Mật khẩu mới">
+                            </div>
+                            <div class="col-md-6">
+                                <button class="btn btn-sm btn-outline-info">Cập nhật mật khẩu</button>
+                            </div>
+                        </div>
+                        <hr>
+                        <h6 class="fw-bold small mb-3">Phân quyền trực tiếp</h6>
+                        <div class="d-flex flex-column gap-2">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input shadow-none" type="checkbox" checked>
+                                <label class="form-check-label small">Cho phép truy cập trang Admin</label>
+                            </div>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input shadow-none" type="checkbox" checked>
+                                <label class="form-check-label small">Toàn quyền quản lý đơn hàng</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="activity">
+                        <div class="table-responsive">
+                            <table class="table table-sm small align-middle">
+                                <thead class="table-light text-muted">
+                                    <tr>
+                                        <th>Thời gian</th>
+                                        <th>Thiết bị</th>
+                                        <th>Địa chỉ IP</th>
+                                        <th>Trạng thái</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>16/01/2026 13:45</td>
+                                        <td>Chrome - Windows 11</td>
+                                        <td>1.55.22.10</td>
+                                        <td><span class="text-success fw-bold">Thành công</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>15/01/2026 08:20</td>
+                                        <td>Safari - iPhone 15</td>
+                                        <td>171.244.xxx.xx</td>
+                                        <td><span class="text-success fw-bold">Thành công</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <style>
+        .nav-pills .nav-link {
+            color: #6c757d;
+            border-radius: 8px;
+            padding: 10px 15px;
+        }
+
+            .nav-pills .nav-link.active {
+                background-color: #e9ecef;
+                color: #198754;
+            }
+
+        .form-control-sm, .form-select-sm {
+            border-color: #eee;
+        }
+
+            .form-control-sm:focus {
+                border-color: #198754;
+            }
+    </style>
+}

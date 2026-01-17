@@ -1,0 +1,96 @@
+﻿@model IndexModel
+<form method="post" asp-page-handler="AddUnit">
+    <div class="modal fade" id="AddUnitModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-sm modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-secondary text-white">
+                    <h5 class="modal-title small fw-bold"><i class="fa-solid fa-ruler-combined me-2"></i>Thêm Đơn Vị</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <label class="form-label small fw-bold">Tên đơn vị (Kg, Thùng, Túi...)</label>
+                    <input type="text" asp-for="newUnit.Name" class="form-control" placeholder="Thêm đơn vị">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-light" data-bs-dismiss="modal">Hủy</button>
+                    <button type="submit" class="btn btn-sm btn-secondary">Thêm mới</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<style>
+    .preview-wrapper {
+        position: relative;
+        width: 90px;
+        height: 90px;
+    }
+
+        .preview-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+
+    .remove-image {
+        position: absolute;
+        top: -6px;
+        right: -6px;
+        background: #dc3545;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 22px;
+        height: 22px;
+        font-size: 12px;
+        cursor: pointer;
+    }
+</style>
+
+<script>
+    const input = document.getElementById('productImages');
+    const previewContainer = document.getElementById('imagePreviewContainer');
+
+    let selectedFiles = [];
+
+    input.addEventListener('change', function () {
+        selectedFiles = Array.from(input.files);
+        renderPreview();
+    });
+
+    function renderPreview() {
+        previewContainer.innerHTML = "";
+
+        const dataTransfer = new DataTransfer();
+
+        selectedFiles.forEach((file, index) => {
+            dataTransfer.items.add(file);
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const wrapper = document.createElement('div');
+                wrapper.classList.add('preview-wrapper');
+
+                wrapper.innerHTML = `
+                    <img src="${e.target.result}">
+                    <button type="button"
+                            class="remove-image"
+                            onclick="removeImage(${index})">×</button>
+                `;
+
+                previewContainer.appendChild(wrapper);
+            };
+            reader.readAsDataURL(file);
+        });
+
+        input.files = dataTransfer.files;
+    }
+
+    function removeImage(index) {
+        selectedFiles.splice(index, 1);
+        renderPreview();
+    }
+</script>

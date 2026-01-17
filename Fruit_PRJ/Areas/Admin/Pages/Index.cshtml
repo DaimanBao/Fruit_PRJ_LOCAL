@@ -1,0 +1,159 @@
+﻿@page
+@model Fruit_Store_PRJ.Areas.Admin.Pages.IndexModel
+@{
+    ViewData["Title"] = "Bảng điều khiển";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="text-success fw-bold m-0"><i class="fa-solid fa-chart-line me-2"></i>Tổng quan hệ thống</h2>
+        <p class="text-muted small mb-0">Hôm nay: 04/01/2026 | Chào mừng Quản trị viên trở lại!</p>
+    </div>
+    <div class="dropdown">
+        <button class="btn btn-white border shadow-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+            <i class="fa-solid fa-calendar-days me-1 text-primary"></i> 7 ngày qua
+        </button>
+        <ul class="dropdown-menu shadow border-0">
+            <li><a class="dropdown-item" href="#">Hôm nay</a></li>
+            <li><a class="dropdown-item" href="#">30 ngày qua</a></li>
+            <li><a class="dropdown-item" href="#">Tháng này</a></li>
+        </ul>
+    </div>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm h-100 p-3 bg-primary text-white">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="small text-uppercase fw-bold opacity-75">Doanh thu ngày</span>
+                <i class="fa-solid fa-wallet fs-4"></i>
+            </div>
+            <h3 class="fw-bold mb-1">1,250,000đ</h3>
+            <div class="small"><i class="fa-solid fa-arrow-up me-1"></i>12% so với hôm qua</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm h-100 p-3">
+            <div class="d-flex justify-content-between align-items-center mb-2 text-muted">
+                <span class="small text-uppercase fw-bold">Đơn hàng mới</span>
+                <i class="fa-solid fa-cart-shopping fs-4 text-success"></i>
+            </div>
+            <h3 class="fw-bold mb-1 text-dark">45</h3>
+            <div class="small text-success"><i class="fa-solid fa-plus me-1"></i>5 đơn chờ duyệt</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm h-100 p-3">
+            <div class="d-flex justify-content-between align-items-center mb-2 text-muted">
+                <span class="small text-uppercase fw-bold">Khách hàng mới</span>
+                <i class="fa-solid fa-user-plus fs-4 text-info"></i>
+            </div>
+            <h3 class="fw-bold mb-1 text-dark">12</h3>
+            <div class="small text-muted">Tổng 1,250 khách hàng</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm h-100 p-3">
+            <div class="d-flex justify-content-between align-items-center mb-2 text-muted">
+                <span class="small text-uppercase fw-bold">Sản phẩm sắp hết</span>
+                <i class="fa-solid fa-box-open fs-4 text-danger"></i>
+            </div>
+            <h3 class="fw-bold mb-1 text-dark">08</h3>
+            <div class="small text-danger fw-bold">Cần nhập thêm kho</div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                <h5 class="fw-bold mb-0">Đơn hàng gần đây</h5>
+                <a asp-page="/Orders/Index" class="btn btn-sm btn-link text-decoration-none p-0">Xem tất cả</a>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="bg-light small text-uppercase fw-bold">
+                            <tr>
+                                <th class="ps-4">Mã đơn</th>
+                                <th>Khách hàng</th>
+                                <th>Tổng tiền</th>
+                                <th>Trạng thái</th>
+                                <th class="text-end pe-4">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="ps-4 fw-bold">#INV-8801</td>
+                                <td>
+                                    <div class="fw-bold small">Nguyễn Văn An</div>
+                                    <div class="text-muted small" style="font-size: 0.7rem;">10 phút trước</div>
+                                </td>
+                                <td class="fw-bold">450,000đ</td>
+                                <td><span class="badge bg-warning-subtle text-warning border border-warning">Chờ xử lý</span></td>
+                                <td class="text-end pe-4">
+                                    <button class="btn btn-sm btn-light border"><i class="fa-solid fa-eye"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="ps-4 fw-bold">#INV-8799</td>
+                                <td>
+                                    <div class="fw-bold small">Trần Thị Bình</div>
+                                    <div class="text-muted small" style="font-size: 0.7rem;">1 giờ trước</div>
+                                </td>
+                                <td class="fw-bold">1,200,000đ</td>
+                                <td><span class="badge bg-info-subtle text-info border border-info">Đang giao</span></td>
+                                <td class="text-end pe-4">
+                                    <button class="btn btn-sm btn-light border"><i class="fa-solid fa-eye"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-white py-3">
+                <h5 class="fw-bold mb-0">Sản phẩm bán chạy</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-flex align-items-center mb-3">
+                    <img src="https://placehold.co/40x40/orange/white?text=C" class="rounded me-3" alt="">
+                    <div class="flex-grow-1">
+                        <div class="fw-bold small text-dark">Cam Sành Tiền Giang</div>
+                        <div class="text-muted small">Đã bán: 125 kg</div>
+                    </div>
+                    <div class="fw-bold text-success">#1</div>
+                </div>
+                <div class="d-flex align-items-center mb-3">
+                    <img src="https://placehold.co/40x40/red/white?text=T" class="rounded me-3" alt="">
+                    <div class="flex-grow-1">
+                        <div class="fw-bold small text-dark">Táo Envy Mỹ</div>
+                        <div class="text-muted small">Đã bán: 84 kg</div>
+                    </div>
+                    <div class="fw-bold text-success">#2</div>
+                </div>
+                <hr>
+                <div class="text-center">
+                    <a href="#" class="small text-decoration-none">Xem báo cáo chi tiết</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white py-3 border-bottom-0">
+                <h5 class="fw-bold mb-0">Thông báo kho</h5>
+            </div>
+            <div class="card-body pt-0">
+                <div class="alert alert-warning border-0 small mb-0">
+                    <i class="fa-solid fa-triangle-exclamation me-2"></i>
+                    Sản phẩm <b>Sầu Riêng Ri6</b> chỉ còn 5kg trong kho.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

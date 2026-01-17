@@ -1,0 +1,21 @@
+﻿@model IndexModel
+<form method="post" asp-page-handler="AddOrigin">
+    <div class="modal fade" id="AddOriginModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-sm modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-secondary text-white">
+                    <h5 class="modal-title small fw-bold"><i class="fa-solid fa-ruler-combined me-2"></i>Thêm Xuất xứ</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <label class="form-label small fw-bold">Tên xuất xứ (Mỹ, Úc, Nhật...)</label>
+                    <input type="text" asp-for="newOrigin.Name" class="form-control" placeholder="Thêm xuất xứ">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-light" data-bs-dismiss="modal">Hủy</button>
+                    <button type="submit" class="btn btn-sm btn-secondary">Thêm mới</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
