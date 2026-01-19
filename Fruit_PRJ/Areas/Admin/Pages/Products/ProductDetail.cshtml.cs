@@ -35,6 +35,8 @@ namespace Fruit_Store_PRJ.Areas.Admin.Pages.Products
         }
         public IActionResult OnGet(int? id)
         {
+            CheckLogin();
+
             if (!id.HasValue)
                 return RedirectToPage("Index");
 
@@ -158,6 +160,13 @@ namespace Fruit_Store_PRJ.Areas.Admin.Pages.Products
             TempData["Message"] = "Đã cập nhật ảnh chính.";
             return RedirectToPage("ProductDetail", new { id = productId });
         }
+
+        public void CheckLogin()
+        {
+            if (HttpContext.Session.GetInt32("AdminId") == null)
+                Response.Redirect("/Admin/LoginAdmin");
+        }
+
 
     }
 }

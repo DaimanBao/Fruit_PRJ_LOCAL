@@ -70,6 +70,8 @@ namespace Fruit_Store_PRJ.Areas.Admin.Pages.Products
 
         public void OnGet()
         {
+            CheckLogin();
+
             LoadBaseData();
 
             products = _productServices.FilterProductsPaging(
@@ -250,6 +252,11 @@ namespace Fruit_Store_PRJ.Areas.Admin.Pages.Products
         }
 
 
+        public void CheckLogin()
+        {
+            if (HttpContext.Session.GetInt32("AdminId") == null)
+                Response.Redirect("/Admin/LoginAdmin");
+        }
 
     }
 }

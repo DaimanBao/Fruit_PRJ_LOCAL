@@ -22,12 +22,13 @@ namespace Fruit_PRJ.Areas.Admin.Pages.Accounts
 
         public IActionResult OnGet(int? id)
         {
+            CheckLogin();
             if (!id.HasValue)
                 return RedirectToPage("Index");
 
             account = _accountServices.GetAccountById(id.Value);
             NewAccount = account;
-            AccountId = id.Value;   // ✅ thêm
+            AccountId = id.Value;  
 
             if (account == null)
                 return RedirectToPage("Index");
@@ -125,6 +126,24 @@ namespace Fruit_PRJ.Areas.Admin.Pages.Accounts
 
             return RedirectToPage(new { id = AccountId });
         }
+
+        public void CheckLogin()
+        {
+            if (HttpContext.Session.GetInt32("AdminId") == null)
+            {
+                TempData["Error"] = "Vui lòng đăng nhập trước.";
+                Response.Redirect("/Admin/LoginAdmin");
+                return;
+            }
+
+            if (HttpContext.Session.GetInt32("AdminRole") != 1)
+            {
+                TempData["Error"] = "Bạn không có quyền truy cập vào Account.";
+                Response.Redirect("/Admin");
+                return;
+            }
+        }
+
 
 
 

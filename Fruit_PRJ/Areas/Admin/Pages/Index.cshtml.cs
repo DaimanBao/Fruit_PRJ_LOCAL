@@ -7,6 +7,14 @@ namespace Fruit_Store_PRJ.Areas.Admin.Pages
     {
         public void OnGet()
         {
+            CheckLogin();
         }
+
+        public void CheckLogin()
+        {
+            if (HttpContext.Session.GetInt32("AdminId") == null)
+                Response.Redirect("/Admin/LoginAdmin");
+        }
+
     }
 }

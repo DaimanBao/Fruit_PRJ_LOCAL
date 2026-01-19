@@ -213,6 +213,31 @@ namespace Fruit_PRJ.Services
             return new ServiceResult { Success = true };
         }
 
+        public class LoginResult : ServiceResult
+        {
+            public Account? Account { get; set; }
+        }
+
+        public LoginResult LoginAdmin(string email, string password)
+        {
+            var acc = _dbContext.Accounts.FirstOrDefault(a => a.Email == email);
+
+            if (acc == null)
+                return new LoginResult { Success = false, Error = "Email không tồn tại." };
+
+            if (!acc.IsActive)
+                return new LoginResult { Success = false, Error = "Tài khoản đã bị khóa." };
+
+            if (acc.Role != 1 && acc.Role != 2)
+                return new LoginResult { Success = false, Error = "Không có quyền truy cập Admin." };
+
+            var hash = HashPassword(password);
+
+            if (acc.PasswordHash != hash)
+                return new LoginResult { Success = false, Error = "Mật khẩu không đúng." };
+
+            return new LoginResult { Success = true, Account = acc };
+        }
 
 
 

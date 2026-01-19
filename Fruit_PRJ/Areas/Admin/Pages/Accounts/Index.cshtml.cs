@@ -67,6 +67,8 @@ namespace Fruit_PRJ.Areas.Admin.Pages.Accounts
 
         public void OnGet()
         {
+            CheckLogin();
+
             Message = TempData["Message"] as string;
             OnLoad();
 
@@ -152,6 +154,24 @@ namespace Fruit_PRJ.Areas.Admin.Pages.Accounts
             TempData["Message"] = "Cập nhật trạng thái thành công";
             return RedirectToPage();
         }
+
+        public void CheckLogin()
+        {
+            if (HttpContext.Session.GetInt32("AdminId") == null)
+            {
+                TempData["Error"] = "Vui lòng đăng nhập trước.";
+                Response.Redirect("/Admin/LoginAdmin");
+                return;
+            }
+
+            if (HttpContext.Session.GetInt32("AdminRole") != 1)
+            {
+                TempData["Error"] = "Bạn không có quyền truy cập vào Account.";
+                Response.Redirect("/Admin");
+                return;
+            }
+        }
+
 
     }
 }

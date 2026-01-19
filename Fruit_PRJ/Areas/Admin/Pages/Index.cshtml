@@ -3,21 +3,18 @@
 @{
     ViewData["Title"] = "Bảng điều khiển";
 }
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger small">
+        @TempData["Error"]
+    </div>
+}
+
 
 <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
         <h2 class="text-success fw-bold m-0"><i class="fa-solid fa-chart-line me-2"></i>Tổng quan hệ thống</h2>
         <p class="text-muted small mb-0">Hôm nay: 04/01/2026 | Chào mừng Quản trị viên trở lại!</p>
-    </div>
-    <div class="dropdown">
-        <button class="btn btn-white border shadow-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
-            <i class="fa-solid fa-calendar-days me-1 text-primary"></i> 7 ngày qua
-        </button>
-        <ul class="dropdown-menu shadow border-0">
-            <li><a class="dropdown-item" href="#">Hôm nay</a></li>
-            <li><a class="dropdown-item" href="#">30 ngày qua</a></li>
-            <li><a class="dropdown-item" href="#">Tháng này</a></li>
-        </ul>
     </div>
 </div>
 
