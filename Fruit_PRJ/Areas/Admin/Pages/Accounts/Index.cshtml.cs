@@ -12,6 +12,8 @@ namespace Fruit_PRJ.Areas.Admin.Pages.Accounts
         private readonly UtilitiesServices _utilitiesServices;
 
 
+
+        //NEW ACCOUNT
         public List<Account> Accounts { get; set; } = new List<Account>();
 
         [BindProperty]
@@ -20,7 +22,35 @@ namespace Fruit_PRJ.Areas.Admin.Pages.Accounts
         [BindProperty]
         public string RePass { get; set; }
 
+        //Mess
         public string Message { get; set; }
+
+        //Search
+        [BindProperty(SupportsGet = true)]
+        public string? SearchKeyword { get; set; }
+        [BindProperty(SupportsGet = true)]
+        public int? FilterRole {  get; set; }
+        [BindProperty(SupportsGet = true)]
+        public bool? FilterStatus { get; set; }
+
+        //Pagination
+
+        [BindProperty(SupportsGet = true)]
+        public int PageIndex { get; set; } = 1;
+
+        public int PageSize { get; set; } = 10;
+
+        public int TotalAccounts { get; set; }
+
+        public int TotalPages =>
+            (int)Math.Ceiling((double)TotalAccounts / PageSize);
+        
+        //TOTAL
+        public int TotalAccount {  get; set; }
+        public int TotalActive {  get; set; }
+        public int TotalInactive { get; set; }
+        public int TotalEmployees { get; set; }
+
 
 
         public IndexModel(AccountServices accountServices,UtilitiesServices utilitiesServices)
@@ -39,6 +69,21 @@ namespace Fruit_PRJ.Areas.Admin.Pages.Accounts
         {
             Message = TempData["Message"] as string;
             OnLoad();
+
+            Accounts = _accountServices.FilterAccountPaging(
+                SearchKeyword,
+                FilterRole,
+                FilterStatus,
+                PageIndex,
+                PageSize,
+                out int total);
+            TotalAccounts = total;
+
+            var stat = _accountServices.GetAccountStatistic();
+            TotalAccount = stat.Total;
+            TotalActive = stat.Active;
+            TotalInactive = stat.Inactive;
+            TotalEmployees = stat.Employees;
         }
 
         public IActionResult OnPostCreateAccountAdminPanel()
@@ -50,12 +95,14 @@ namespace Fruit_PRJ.Areas.Admin.Pages.Accounts
                 string.IsNullOrWhiteSpace(RePass))
             {
                 Message = "Thông tin không được bỏ trống";
+                OnLoad();
                 return Page();
             }
 
             if(NewAccount.PasswordHash != RePass)
             {
                 Message = "Repass và password không trùng nhau";
+                OnLoad();
                 return Page();
             }
 
@@ -64,8 +111,10 @@ namespace Fruit_PRJ.Areas.Admin.Pages.Accounts
             if (!result.Success)
             {
                 Message = result.Error;
+                OnLoad();
                 return Page();
             }
+            OnLoad();
             TempData["Message"] = "Thêm tài khoản thành công";
             return RedirectToPage();
         }
@@ -89,5 +138,20 @@ namespace Fruit_PRJ.Areas.Admin.Pages.Accounts
         {
             return _utilitiesServices.GetAccountStatusClass(statusInt);
         }
+
+        public IActionResult OnPostToggleStatus(int id)
+        {
+            var result = _accountServices.ToggleAccountStatus(id);
+
+            if (!result.Success)
+            {
+                TempData["Message"] = result.Error;
+                return RedirectToPage();
+            }
+
+            TempData["Message"] = "Cập nhật trạng thái thành công";
+            return RedirectToPage();
+        }
+
     }
 }

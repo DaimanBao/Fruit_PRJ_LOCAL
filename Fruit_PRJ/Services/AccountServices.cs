@@ -88,5 +88,90 @@ namespace Fruit_PRJ.Services
             return _dbContext.Accounts.ToList();
         }
 
+        public Account GetAccountById(int accountId)
+        {
+            return _dbContext.Accounts.FirstOrDefault(ac => ac.Id == accountId);
+        }
+
+        public List<Account> FilterAccountPaging(
+            string? searchKeyword,
+            int? role,
+            bool? status,
+            int pageIndex,
+            int pageSize,
+            out int totalAccount
+)
+        {
+            var query = _dbContext.Accounts.AsQueryable();
+
+            // Search
+            if (!string.IsNullOrWhiteSpace(searchKeyword))
+            {
+                searchKeyword = searchKeyword.Trim();
+
+                query = query.Where(ac =>
+                    ac.Username.Contains(searchKeyword) ||
+                    ac.Email.Contains(searchKeyword) ||
+                    ac.Phone.Contains(searchKeyword)
+                );
+            }
+
+            // Role
+            if (role.HasValue)
+            {
+                query = query.Where(ac => ac.Role == role.Value);
+            }
+
+            // Status
+            if (status.HasValue)
+            {
+                query = query.Where(ac => ac.IsActive == status.Value);
+            }
+
+            // Total before paging
+            totalAccount = query.Count();
+
+            // Paging
+            return query
+                .OrderByDescending(ac => ac.Id)
+                .Skip((pageIndex - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+        }
+
+        public class AccountStatisticDto
+        {
+            public int Total { get; set; }
+            public int Active { get; set; }
+            public int Inactive { get; set; }
+
+            public int Employees { get; set; }
+        }
+
+        public AccountStatisticDto GetAccountStatistic()
+        {
+            var query = _dbContext.Accounts;
+            return new AccountStatisticDto { 
+                Total = query.Count(),
+                Active = query.Count(ac => ac.IsActive),
+                Inactive = query.Count(ac => !ac.IsActive),
+                Employees = query.Count(ac => ac.Role == 1 || ac.Role == 2)
+            };
+        }
+
+        public ServiceResult ToggleAccountStatus(int accountId)
+        {
+            var acc = _dbContext.Accounts.FirstOrDefault(a => a.Id == accountId);
+
+            if (acc == null)
+                return new ServiceResult { Success = false, Error = "Không tìm thấy tài khoản." };
+
+            acc.IsActive = !acc.IsActive;
+
+            _dbContext.SaveChanges();
+
+            return new ServiceResult { Success = true };
+        }
+
     }
 }
