@@ -25,6 +25,7 @@ namespace Fruit_PRJ.Services
             _imageServices = imageServices;
         }
 
+        //ADMIN///////////////////////////////////////////////////////
         //Category//--------------------------------------------- 
 
         //Get All Categories
@@ -463,6 +464,47 @@ namespace Fruit_PRJ.Services
             _context.SaveChanges();
         }
 
+        //WEBSITE/////////////////////////////////////////////////////
+        public List<Product> FilterShopProducts(
+            string? keyword,
+            int? categoryId,
+            int? originId,
+            decimal? minPrice,
+            decimal? maxPrice,
+            int pageIndex,
+            int pageSize,
+            out int totalItems)
+        {
+            var query = _context.Products
+                .Include(p => p.Category)
+                .Include(p => p.Origin)
+                .Include(p => p.Unit)
+                .Include(p => p.ProductImages)
+                .Where(p => !p.IsDeleted && p.IsActive && p.Status == 1);
+
+            if (!string.IsNullOrWhiteSpace(keyword))
+                query = query.Where(p => p.Name.Contains(keyword));
+
+            if (categoryId.HasValue)
+                query = query.Where(p => p.CategoryId == categoryId);
+
+            if (originId.HasValue)
+                query = query.Where(p => p.OriginId == originId);
+
+            if (minPrice.HasValue)
+                query = query.Where(p => p.Price >= minPrice);
+
+            if (maxPrice.HasValue)
+                query = query.Where(p => p.Price <= maxPrice);
+
+            totalItems = query.Count();
+
+            return query
+                .OrderByDescending(p => p.Id)
+                .Skip((pageIndex - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+        }
 
     }
 }

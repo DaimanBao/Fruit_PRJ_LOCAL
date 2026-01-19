@@ -40,31 +40,60 @@
         <h2 class="pb-2 border-bottom mb-4 text-center text-uppercase text-secondary">Sản Phẩm Nổi Bật</h2>
 
         <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4">
-            @foreach (var product in Model.products)
+            @foreach (var product in Model.Products)
             {
+                var image = product.ProductImages.FirstOrDefault()?.ImageUrl ?? "/images/no-image.png";
+
                 <div class="col">
                     <div class="card h-100 shadow-sm">
-                        <img src="" class="card-img-top" alt="Táo Đỏ" style="height: 200px; object-fit: cover;">
+                        <img src="@image" class="card-img-top" style="height:200px;object-fit:cover">
+
                         <div class="card-body">
-                            <h5 class="card-title text-success">@product.Name</h5>
-                            <p class="card-text text-muted">@product.Description</p>
-                            <h6 class="text-danger fw-bold">@product.Price / @product.Unit.Name</h6>
+                            <h6 class="fw-bold text-success">@product.Name</h6>
+                            <p class="small text-muted">@product.Description</p>
+                            <div class="fw-bold text-danger">
+                                @product.Price.ToString("N0") đ / @product.Unit.Name
+                            </div>
                         </div>
-                        <div class="card-footer bg-transparent border-top-0 d-grid gap-2">
-                            <form method="post">
-                                <input type="hidden" name="productId" value="1" />
-                                <button type="submit" class="btn btn-outline-success w-100">
-                                    Thêm vào giỏ
-                                </button>
-                            </form>
+
+                        <div class="card-footer bg-white border-0">
+                            <div class="d-grid gap-2">
+                                <a asp-page="/ProductDetail"
+                                   asp-route-id="@product.Id"
+                                   class="btn btn-outline-secondary btn-sm">
+                                    👁 Xem chi tiết
+                                </a>
+
+                                <form method="post" asp-page-handler="BuyNow">
+                                    <input type="hidden" name="id" value="@product.Id" />
+                                    <button class="btn btn-success btn-sm w-100">
+                                        ⚡ Mua ngay
+                                    </button>
+                                </form>
+
+                                <form method="post" asp-page-handler="AddToCart">
+                                    <input type="hidden" name="id" value="@product.Id" />
+                                    <button class="btn btn-outline-success btn-sm w-100">
+                                        🛒 Thêm vào giỏ
+                                    </button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
             }
-            
 
-           
+            <nav class="mt-4">
+                <ul class="pagination justify-content-center">
 
+                    @for (int i = 1; i <= Model.TotalPages; i++)
+                    {
+                        <li class="page-item @(i == Model.PageIndex ? "active" : "")">
+                            <a class="page-link" asp-route-pageIndex="@i">@i</a>
+                        </li>
+                    }
+                </ul>
+            </nav>
         </div>
     </div>
 
