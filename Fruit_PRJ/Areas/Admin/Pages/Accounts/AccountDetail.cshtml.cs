@@ -1,3 +1,6 @@
+﻿using Fruit_PRJ.Models;
+using Fruit_PRJ.Services;
+using Fruit_Store_PRJ.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -5,8 +8,67 @@ namespace Fruit_PRJ.Areas.Admin.Pages.Accounts
 {
     public class AccountDetailModel : PageModel
     {
-        public void OnGet()
+        private readonly AccountServices _accountServices;
+        private readonly UtilitiesServices _utilitiesServices;
+
+        public Account? account {  get; set; }
+        public string Message { get; set; }
+
+        public AccountDetailModel(AccountServices accountServices, UtilitiesServices utilitiesServices)
         {
+            _accountServices = accountServices;
+            _utilitiesServices = utilitiesServices;
         }
+
+        public IActionResult OnGet(int? id)
+        {
+            if (!id.HasValue)
+                return RedirectToPage("Index");
+
+            account = _accountServices.GetAccountById(id.Value);
+
+            if (account == null)
+                return RedirectToPage("Index");
+
+            Message = TempData["Message"] as string;
+
+            return Page();
+
+        }
+
+        public string GetAccountRoleText(int roleInt)
+        {
+            return _utilitiesServices.GetAccountRoleText(roleInt);
+        }
+
+        public string GetAccountRoleClass(int roleInt)
+        {
+            return _utilitiesServices.GetAccountRoleClass(roleInt);
+        }
+
+        public string GetAccountStatusText(bool statusInt)
+        {
+            return _utilitiesServices.GetAccountStatusText(statusInt);
+        }
+
+        public string GetAccountStatusClass(bool statusInt)
+        {
+            return _utilitiesServices.GetAccountStatusClass(statusInt);
+        }
+
+        public IActionResult OnPostToggleStatus(int id)
+        {
+            var result = _accountServices.ToggleAccountStatus(id);
+
+            if (!result.Success)
+            {
+                TempData["Message"] = result.Error;
+                return RedirectToPage(new { id });
+            }
+
+            TempData["Message"] = "Cập nhật trạng thái thành công";
+            return RedirectToPage(new { id });
+        }
+
     }
 }
