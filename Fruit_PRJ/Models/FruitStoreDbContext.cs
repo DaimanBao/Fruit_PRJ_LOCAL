@@ -55,7 +55,6 @@ public partial class FruitStoreDbContext : DbContext
             entity.Property(e => e.Phone).HasMaxLength(20);
             entity.Property(e => e.ResetPasswordExpiredAt).HasColumnType("datetime");
             entity.Property(e => e.ResetPasswordToken).HasMaxLength(255);
-            entity.Property(e => e.Role).HasMaxLength(50);
             entity.Property(e => e.Username).HasMaxLength(100);
         });
 

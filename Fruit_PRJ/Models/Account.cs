@@ -13,7 +13,7 @@ public partial class Account
 
     public string Email { get; set; } = null!;
 
-    public string Role { get; set; } = null!;
+    public int Role { get; set; }
 
     public bool IsActive { get; set; }
 
