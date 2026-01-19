@@ -88,26 +88,37 @@
             <div class="card-body">
                 <div class="tab-content" id="accountTabContent">
                     <div class="tab-pane fade show active" id="profile">
-                        <form class="row g-3">
+                        <form method="post" asp-page-handler="UpdateProfile" class="row g-3">
+                            <input type="hidden" asp-for="NewAccount.Id" />
+
                             <div class="col-md-6">
-                                <label class="form-label small fw-bold">Họ và tên</label>
-                                <input type="text" class="form-control form-control-sm shadow-none" value="@Model.account.Username">
+                                <label class="form-label small fw-bold">Username</label>
+                                <input asp-for="NewAccount.Username" class="form-control form-control-sm shadow-none" />
                             </div>
+
                             <div class="col-md-6">
                                 <label class="form-label small fw-bold">Vai trò hệ thống</label>
-                                <select class="form-select form-select-sm shadow-none">
-                                    <option selected>Admin</option>
-                                    <option>Staff</option>
-                                    <option>Customer</option>
+                                <select asp-for="NewAccount.Role" class="form-select form-select-sm shadow-none">
+                                    <option value="1">Admin</option>
+                                    <option value="2">Staff</option>
+                                    <option value="3">Customer</option>
                                 </select>
                             </div>
+
                             <div class="col-md-6">
-                                <label class="form-label small fw-bold">Email đăng nhập</label>
-                                <input type="email" class="form-control form-control-sm shadow-none" value="quanlv@fruitfresh.com">
+                                <label class="form-label small fw-bold">Email</label>
+                                <input asp-for="NewAccount.Email" type="email" class="form-control form-control-sm shadow-none" />
                             </div>
+
                             <div class="col-md-6">
-                                <label class="form-label small fw-bold">Số điện thoại</label>
-                                <input type="text" class="form-control form-control-sm shadow-none" value="0987654321">
+                                <label class="form-label small fw-bold">Phone</label>
+                                <input asp-for="NewAccount.Phone" class="form-control form-control-sm shadow-none" />
+                            </div>
+
+                            <div class="col-12 text-end">
+                                <button type="submit" class="btn btn-sm btn-success">
+                                    <i class="fa-solid fa-save me-1"></i> Lưu thay đổi
+                                </button>
                             </div>
                         </form>
                     </div>

@@ -173,5 +173,29 @@ namespace Fruit_PRJ.Services
             return new ServiceResult { Success = true };
         }
 
+        public ServiceResult UpdateAccountProfile(Account model)
+        {
+            var acc = _dbContext.Accounts.FirstOrDefault(a => a.Id == model.Id);
+
+            if (acc == null)
+                return new ServiceResult { Success = false, Error = "Không tìm thấy tài khoản." };
+
+            if (_dbContext.Accounts.Any(a => a.Username == model.Username && a.Id != model.Id))
+                return new ServiceResult { Success = false, Error = "Username đã tồn tại." };
+
+            if (_dbContext.Accounts.Any(a => a.Email == model.Email && a.Id != model.Id))
+                return new ServiceResult { Success = false, Error = "Email đã tồn tại." };
+
+            acc.Username = _utilitiesServices.CleanDataInput(model.Username, false, false, true, true, true);
+            acc.Email = _utilitiesServices.CleanDataInput(model.Email, false, false, false, true, true);
+            acc.Phone = _utilitiesServices.CleanDataInput(model.Phone, false, false, false, true, true);
+            acc.Role = model.Role;
+
+            _dbContext.SaveChanges();
+
+            return new ServiceResult { Success = true };
+        }
+
+
     }
 }

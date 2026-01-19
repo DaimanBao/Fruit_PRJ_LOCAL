@@ -26,6 +26,7 @@ namespace Fruit_PRJ.Areas.Admin.Pages.Accounts
                 return RedirectToPage("Index");
 
             account = _accountServices.GetAccountById(id.Value);
+            NewAccount = account;
 
             if (account == null)
                 return RedirectToPage("Index");
@@ -69,6 +70,32 @@ namespace Fruit_PRJ.Areas.Admin.Pages.Accounts
             TempData["Message"] = "Cập nhật trạng thái thành công";
             return RedirectToPage(new { id });
         }
+
+
+        [BindProperty]
+        public Account NewAccount { get; set; }
+
+        public IActionResult OnPostUpdateProfile()
+        {
+            if (NewAccount == null)
+            {
+                TempData["Message"] = "Dữ liệu không hợp lệ.";
+                return RedirectToPage("Index");
+            }
+
+            var result = _accountServices.UpdateAccountProfile(NewAccount);
+
+            if (!result.Success)
+            {
+                TempData["Message"] = result.Error;
+                return RedirectToPage(new { id = NewAccount.Id });
+            }
+
+            TempData["Message"] = "Cập nhật thông tin thành công";
+            return RedirectToPage(new { id = NewAccount.Id });
+        }
+
+
 
     }
 }
