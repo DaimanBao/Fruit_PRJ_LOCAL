@@ -1,0 +1,170 @@
+﻿@page
+@model Fruit_PRJ.Areas.Admin.Pages.Accounts.IndexModel
+@{
+    ViewData["Title"] = "Quản lý Tài khoản";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="text-success fw-bold m-0"><i class="fa-solid fa-users-gear me-2"></i>Quản lý Tài khoản</h2>
+        <p class="text-muted small mb-0">Hệ thống phân quyền người dùng và giám sát trạng thái tài khoản</p>
+    </div>
+    <button class="btn btn-primary shadow-sm px-3" data-bs-toggle="modal" data-bs-target="#CreateAccountModal">
+        <i class="fa-solid fa-user-plus me-1"></i> Tạo tài khoản mới
+    </button>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm p-3 border-start border-primary border-4">
+            <div class="d-flex align-items-center">
+                <div class="bg-primary-subtle text-primary rounded-3 p-3 me-3">
+                    <i class="fa-solid fa-id-card fs-4"></i>
+                </div>
+                <div>
+                    <div class="text-muted small fw-bold">Tổng tài khoản</div>
+                    <div class="h5 fw-bold mb-0">120</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm p-3 border-start border-success border-4">
+            <div class="d-flex align-items-center">
+                <div class="bg-success-subtle text-success rounded-3 p-3 me-3">
+                    <i class="fa-solid fa-user-check fs-4"></i>
+                </div>
+                <div>
+                    <div class="text-muted small fw-bold">Đang hoạt động</div>
+                    <div class="h5 fw-bold mb-0">115</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm p-3 border-start border-danger border-4">
+            <div class="d-flex align-items-center">
+                <div class="bg-danger-subtle text-danger rounded-3 p-3 me-3">
+                    <i class="fa-solid fa-user-lock fs-4"></i>
+                </div>
+                <div>
+                    <div class="text-muted small fw-bold">Đã bị khóa</div>
+                    <div class="h5 fw-bold mb-0">05</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm p-3 border-start border-warning border-4">
+            <div class="d-flex align-items-center">
+                <div class="bg-warning-subtle text-warning rounded-3 p-3 me-3">
+                    <i class="fa-solid fa-user-tie fs-4"></i>
+                </div>
+                <div>
+                    <div class="text-muted small fw-bold">Tổng nhân viên</div>
+                    <div class="h5 fw-bold mb-0">12</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--BO LOC-->
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-body">
+        <form method="get">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <div class="input-group">
+                        <span class="input-group-text bg-white text-muted border-end-0"><i class="fa-solid fa-magnifying-glass"></i></span>
+                        <input type="text" name="SearchKeyword" class="form-control border-start-0 shadow-none" placeholder="Tìm kiếm tài khoản...">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <select class="form-select shadow-none" name="FilterRole">
+                        <option value="" selected>Tất cả vai trò (Role)</option>
+                        <option value="1">Admin</option>
+                        <option value="2">Staff</option>
+                        <option value="3">Customer</option>
+
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <select class="form-select shadow-none" name="FilterStatus">
+                        <option value="" selected>Trạng thái</option>
+                        <option value="true">Đang hoạt động</option>
+                        <option value="false">Ngừng hoạt động</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-secondary w-100">Lọc dữ liệu</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!--THONG TIN-->
+<div class="card border-0 shadow-sm overflow-hidden">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr class="text-uppercase small fw-bold text-secondary border-bottom">
+                        <th class="ps-4 py-3">Người dùng / Liên hệ</th>
+                        <th>Vai trò</th>
+                        <th>Trạng thái</th>
+                        <th>Ngày tạo</th>
+                        <th class="text-end pe-4">Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach(var account in Model.Accounts)
+                    {
+                        var accountName = account.Username;
+                        
+
+                        <tr>
+                            <td class="ps-4">
+                                <div class="d-flex align-items-center py-1">
+                                    <img src="https://ui-avatars.com/api/?name=@accountName&background=0D6EFD&color=fff" class="rounded-circle me-3 shadow-sm" width="40" height="40">
+                                    <div>
+                                        <div class="fw-bold text-dark text-truncate" style="max-width: 200px;">@accountName</div>
+                                        <small class="text-muted"><i class="fa-solid fa-envelope me-1"></i>@account.Email - </small>
+                                        <small class="text-muted"><i class="fa-solid fa-phone me-1"></i>@account.Phone</small>
+
+                                    </div>
+                                </div>
+                            </td>
+                            <td><span class="badge bg-@Model.GetAccountRoleClass(account.Role)-subtle text-@Model.GetAccountRoleClass(account.Role) px-3 py-2 border border-@Model.GetAccountRoleClass(account.Role) rounded-pill">@Model.GetAccountRoleText(account.Role)</span></td>
+                            <td><span class="badge bg-@Model.GetAccountStatusClass(account.IsActive)-subtle text-@Model.GetAccountStatusClass(account.IsActive) border border-@Model.GetAccountStatusClass(account.IsActive) px-2 py-1 small">@Model.GetAccountStatusText(account.IsActive)</span></td>
+                            <td class="small text-muted">@account.CreatedAt</td>
+                            <td class="text-end pe-4">
+                                <div class="btn-group shadow-sm">
+                                    <a asp-page="AccountDetail" class="btn btn-sm btn-white text-primary border" title="Chi tiết"><i class="fa-solid fa-user-pen"></i></a>
+                                    <button class="btn btn-sm btn-white text-danger border" title="Khóa"><i class="fa-solid fa-lock"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@if (TempData["Message"] != null || Model.Message != null)
+{
+    <div class="offcanvas offcanvas-end show" tabindex="-1" id="offcanvas" aria-labelledby="offcanvasLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasLabel">Thông báo</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            @Model.Message
+        </div>
+    </div>
+}
+
+
+@await Html.PartialAsync("_CreateAccountModal")

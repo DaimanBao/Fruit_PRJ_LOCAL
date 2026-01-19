@@ -60,18 +60,32 @@ namespace Fruit_PRJ.Services
         public ServiceResult AddAccountAdminPanel(Account accountAdminPanel)
         {
             if(accountAdminPanel == null) return new ServiceResult { Success = false, Error = "Dữ liệu không hợp lệ." };
+
+            accountAdminPanel.Address ??= "Không có địa chỉ";
+
+            accountAdminPanel.Address = _utilitiesServices.CleanDataInput(accountAdminPanel.Address, false,false,true,true,true);
             accountAdminPanel.Username = _utilitiesServices.CleanDataInput(accountAdminPanel.Username,false,false,true,true,true);
             accountAdminPanel.Email = _utilitiesServices.CleanDataInput(accountAdminPanel.Email, false, false, false, true, true);
-            accountAdminPanel.Address = _utilitiesServices.CleanDataInput(accountAdminPanel.Address, false,false,false,true,true);
             accountAdminPanel.Phone = _utilitiesServices.CleanDataInput(accountAdminPanel.Phone,false,false,false,true,true);
 
             if(IsNameExist(accountAdminPanel.Username)) return new ServiceResult { Success = false, Error = "Username đã tồn tại." };
             if (IsEmailExist(accountAdminPanel.Email)) return new ServiceResult { Success = false, Error = "Tên email đã tồn tại" };
             if(IsPhoneExist(accountAdminPanel.Phone)) return new ServiceResult { Success = false, Error = "Số điện thoại đã tồn tại." };
             if(!CheckEmailValid(accountAdminPanel.Email)) return new ServiceResult{Success = false,Error = "Email không đúng định dạng."};
+
             accountAdminPanel.PasswordHash = HashPassword(accountAdminPanel.PasswordHash);
+            accountAdminPanel.CreatedAt = DateTime.Now;
+            accountAdminPanel.IsActive = true;
+
+            _dbContext.Accounts.Add(accountAdminPanel);
+            _dbContext.SaveChanges();
 
             return new ServiceResult { Success = true };
+        }
+
+        public List<Account> GetAllAccounts()
+        {
+            return _dbContext.Accounts.ToList();
         }
 
     }

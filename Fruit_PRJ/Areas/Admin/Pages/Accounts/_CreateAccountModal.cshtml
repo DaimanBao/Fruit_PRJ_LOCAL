@@ -1,4 +1,5 @@
-﻿
+﻿@model Fruit_PRJ.Areas.Admin.Pages.Accounts.IndexModel
+
 <div class="modal fade" id="CreateAccountModal" tabindex="-1" aria-labelledby="CreateAccountModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0 shadow-lg">
@@ -10,23 +11,23 @@
             </div>
 
             <div class="modal-body p-4">
-                <form id="formCreateAccount" method="post">
+                <form method="post" asp-page-handler="CreateAccountAdminPanel">
                     <div class="mb-3">
                         <label class="form-label small fw-bold text-secondary">Tên đăng nhập (Username)</label>
                         <div class="input-group">
                             <span class="input-group-text bg-light border-end-0"><i class="fa-solid fa-user text-muted"></i></span>
-                            <input type="text" class="form-control border-start-0 shadow-none" placeholder="Ví dụ: quanlv2026" required>
+                            <input type="text" asp-for="NewAccount.Username" class="form-control border-start-0 shadow-none" placeholder="Ví dụ: quanlv2026" required>
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label small fw-bold text-secondary">Email</label>
-                            <input type="email" class="form-control shadow-none" placeholder="admin@example.com" required>
+                            <input type="email" asp-for="NewAccount.Email" class="form-control shadow-none" placeholder="admin@example.com" required>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label small fw-bold text-secondary">Số điện thoại</label>
-                            <input type="tel" class="form-control shadow-none" placeholder="0901234567" required>
+                            <input type="tel" asp-for="NewAccount.Phone" pattern="[0-9]{9,11}" class="form-control shadow-none" placeholder="0901234567" required>
                         </div>
                     </div>
 
@@ -35,35 +36,36 @@
                             <label class="form-label small fw-bold text-secondary">Mật khẩu</label>
                             <div class="input-group">
                                 <span class="input-group-text bg-light border-end-0"><i class="fa-solid fa-key text-muted"></i></span>
-                                <input type="password" class="form-control border-start-0 shadow-none" placeholder="••••••••" required>
+                                <input type="password" asp-for="NewAccount.PasswordHash" class="form-control border-start-0 shadow-none" placeholder="••••••••" required>
                             </div>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label small fw-bold text-secondary">Nhập lại mật khẩu</label>
                             <div class="input-group">
                                 <span class="input-group-text bg-light border-end-0"><i class="fa-solid fa-shield-check text-muted"></i></span>
-                                <input type="password" class="form-control border-start-0 shadow-none" placeholder="••••••••" required>
+                                <input type="password" asp-for="RePass" class="form-control border-start-0 shadow-none" placeholder="••••••••" required>
                             </div>
                         </div>
                     </div>
 
                     <div class="mb-2">
                         <label class="form-label small fw-bold text-secondary">Phân quyền ban đầu</label>
-                        <select class="form-select shadow-none">
-                            <option value="Staff">Nhân viên (Staff)</option>
-                            <option value="Admin">Quản trị viên (Admin)</option>
-                            <option value="Customer">Khách hàng (Customer)</option>
+                        <select class="form-select shadow-none" asp-for="NewAccount.Role">
+                            <option value=2>Nhân viên (Staff)</option>
+                            <option value=1>Quản trị viên (Admin)</option>
+                            <option value=3>Khách hàng (Customer)</option>
                         </select>
+                    </div>
+
+                    <div class="modal-footer bg-light border-0 px-4">
+                        <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal">Hủy</button>
+                        <button type="submit" class="btn btn-success px-4 shadow-sm">
+                            <i class="fa-solid fa-check me-1"></i> Xác nhận tạo
+                        </button>
                     </div>
                 </form>
             </div>
 
-            <div class="modal-footer bg-light border-0 px-4">
-                <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal">Hủy</button>
-                <button type="submit" form="formCreateAccount" class="btn btn-success px-4 shadow-sm">
-                    <i class="fa-solid fa-check me-1"></i> Xác nhận tạo
-                </button>
-            </div>
         </div>
     </div>
 </div>

@@ -113,7 +113,55 @@ namespace Fruit_Store_PRJ.Services
                 .Select(s => s[rnd.Next(s.Length)]).ToArray());
         }
 
+        public string GetAccountStatusText(int statusId)
+        {
+            switch (statusId)
+            {
+                case 1:
+                    return "Đang hoạt động";
+                case 0:
+                    return "Ngừng hoạt động";
+                default:
+                    return "Unknown";
+            }
 
+        }
 
+        public string GetAccountStatusClass(bool status)
+        {
+            return status ? "success" : "secondary";
+        }
+
+        public string GetAccountStatusText(bool status)
+        {
+            return status ? "Hoạt động" : "Ngừng hoạt động";
+        }
+
+        public string GetAccountRoleText(int statusId)
+        {
+            switch (statusId)
+            {
+                case 1:
+                    return "Admin";
+                case 2:
+                    return "Staff";
+                case 3:
+                    return "Customer";
+                default:
+                    return "Unknown";
+            }
+
+        }
+
+        public string GetAccountRoleClass(int status)
+        {
+            return status switch
+            {
+                1 => "danger",
+                2 => "primary",
+                3 => "success",
+                _ => "dark"
+            };
+        }
     }
 }
