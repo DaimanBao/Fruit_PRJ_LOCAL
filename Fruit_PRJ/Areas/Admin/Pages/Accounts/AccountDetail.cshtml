@@ -13,7 +13,8 @@
             <button type="submit"
                     class="btn btn-sm btn-white border @(Model.account.IsActive ? "text-danger" : "text-success")"
                     title="@(Model.account.IsActive ? "Khóa" : "Mở khóa")">
-                <i class="fa-solid @(Model.account.IsActive ? "fa-lock" : "fa-lock-open")"></i> Khóa tài khoản
+                <i class="fa-solid @(Model.account.IsActive ? "fa-lock" : "fa-lock-open")"></i> @(Model.account.IsActive ? "Khóa tài khoản" : "Mở khóa tài khoản")
+
             </button>
         </form>
     </div>
@@ -125,14 +126,20 @@
 
                     <div class="tab-pane fade" id="security">
                         <h6 class="fw-bold small mb-3">Đổi mật khẩu nhanh</h6>
-                        <div class="row g-3 mb-4">
+                        <form method="post" asp-page-handler="ResetPassword" class="row g-3">
+                            <input type="hidden" asp-for="AccountId" />
+
                             <div class="col-md-6">
-                                <input type="password" class="form-control form-control-sm shadow-none" placeholder="Mật khẩu mới">
+                                <input asp-for="NewPassword" type="password"
+                                       class="form-control form-control-sm shadow-none"
+                                       placeholder="Mật khẩu mới" />
                             </div>
+
                             <div class="col-md-6">
                                 <button class="btn btn-sm btn-outline-info">Cập nhật mật khẩu</button>
                             </div>
-                        </div>
+                        </form>
+
                     </div>
                 </div>
             </div>

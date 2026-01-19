@@ -196,6 +196,25 @@ namespace Fruit_PRJ.Services
             return new ServiceResult { Success = true };
         }
 
+        public ServiceResult ResetPassword(int id, string password)
+        {
+            var acc = _dbContext.Accounts.FirstOrDefault(a => a.Id == id);
+
+            if (acc == null)
+                return new ServiceResult { Success = false, Error = "Không tìm thấy tài khoản." };
+
+            if (!acc.IsActive)
+                return new ServiceResult { Success = false, Error = "Tài khoản đang bị khóa." };
+
+            acc.PasswordHash = HashPassword(password);
+
+            _dbContext.SaveChanges();
+
+            return new ServiceResult { Success = true };
+        }
+
+
+
 
     }
 }

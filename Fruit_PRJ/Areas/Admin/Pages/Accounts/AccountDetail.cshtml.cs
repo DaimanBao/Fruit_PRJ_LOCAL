@@ -27,6 +27,7 @@ namespace Fruit_PRJ.Areas.Admin.Pages.Accounts
 
             account = _accountServices.GetAccountById(id.Value);
             NewAccount = account;
+            AccountId = id.Value;   // ✅ thêm
 
             if (account == null)
                 return RedirectToPage("Index");
@@ -34,8 +35,8 @@ namespace Fruit_PRJ.Areas.Admin.Pages.Accounts
             Message = TempData["Message"] as string;
 
             return Page();
-
         }
+
 
         public string GetAccountRoleText(int roleInt)
         {
@@ -94,6 +95,37 @@ namespace Fruit_PRJ.Areas.Admin.Pages.Accounts
             TempData["Message"] = "Cập nhật thông tin thành công";
             return RedirectToPage(new { id = NewAccount.Id });
         }
+
+
+        [BindProperty]
+        public string NewPassword { get; set; }
+        [BindProperty]
+        public int AccountId { get; set; }
+
+
+        public IActionResult OnPostResetPassword()
+        {
+            if (AccountId <= 0)
+            {
+                TempData["Message"] = "Không xác định được tài khoản.";
+                return RedirectToPage("Index");
+            }
+
+            if (string.IsNullOrWhiteSpace(NewPassword))
+            {
+                TempData["Message"] = "Mật khẩu không được rỗng";
+                return RedirectToPage(new { id = AccountId });
+            }
+
+            var result = _accountServices.ResetPassword(AccountId, NewPassword);
+
+            TempData["Message"] = result.Success
+                ? "Đổi mật khẩu thành công"
+                : result.Error;
+
+            return RedirectToPage(new { id = AccountId });
+        }
+
 
 
 
