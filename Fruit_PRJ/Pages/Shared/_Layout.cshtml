@@ -1,52 +1,118 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Fruit_PRJ</title>
-    <script type="importmap"></script>
+    <title>@ViewData["Title"] - Fruit Store</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/Fruit_PRJ.styles.css" asp-append-version="true" />
+    <style>
+        body {
+            font-family: 'Quicksand', sans-serif;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            color: #28a745 !important;
+        }
+
+        .cart-icon {
+            position: relative;
+            font-size: 1.2rem;
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -12px;
+            background: #ffc107;
+            color: #000;
+            font-size: 0.7rem;
+            padding: 2px 6px;
+            border-radius: 50%;
+        }
+    </style>
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-page="/Index">Fruit_PRJ</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+                <a class="navbar-brand" asp-page="/Index">
+                    <i class="fa-solid fa-seedling me-2"></i>FRUIT STORE
+                </a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse">
                     <span class="navbar-toggler-icon"></span>
                 </button>
+
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
+                            <a class="nav-link text-dark fw-bold" asp-page="/Index">Trang chủ</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
+                            <a class="nav-link text-dark fw-bold" asp-page="/Products/Index">Sản phẩm</a>
                         </li>
                     </ul>
+
+                    <div class="d-flex align-items-center">
+                        <form class="me-3 d-none d-md-flex" action="/san-pham" method="get">
+                            <div class="input-group input-group-sm">
+                                <input name="searchTerm" class="form-control" type="search" placeholder="Tìm trái cây...">
+                                <button class="btn btn-success" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                            </div>
+                        </form>
+
+                        <a asp-page="/Cart/Index" class="nav-link text-dark cart-icon me-3">
+                            <i class="fa-solid fa-basket-shopping"></i>
+                            <span class="cart-badge">@* Logic lấy số lượng giỏ hàng *@ 0</span>
+                        </a>
+
+                        <a href="#" class="nav-link text-dark"><i class="fa-regular fa-circle-user fs-5"></i></a>
+                    </div>
                 </div>
             </div>
         </nav>
     </header>
+
     <div class="container">
-        <main role="main" class="pb-3">
+        <main role="main" class="py-4">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - Fruit_PRJ - <a asp-area="" asp-page="/Privacy">Privacy</a>
+    <footer class="border-top footer text-muted bg-light">
+        <div class="container py-4">
+            <div class="row">
+                <div class="col-md-4">
+                    <h6 class="fw-bold text-success">Về Fruit Store</h6>
+                    <p class="small">Cung cấp trái cây nhập khẩu và đặc sản vùng miền tươi ngon, an toàn cho sức khỏe gia đình bạn.</p>
+                </div>
+                <div class="col-md-4">
+                    <h6 class="fw-bold">Liên kết nhanh</h6>
+                    <ul class="list-unstyled small">
+                        <li><a asp-page="/Index" class="text-decoration-none text-muted">Trang chủ</a></li>
+                        <li><a asp-page="/Products/Index" class="text-decoration-none text-muted">Sản phẩm</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h6 class="fw-bold">Hỗ trợ khách hàng</h6>
+                    <p class="small mb-1"><i class="fa-solid fa-phone me-2"></i> Hotline: 1900 1234</p>
+                    <p class="small"><i class="fa-solid fa-location-dot me-2"></i> Hà Nội, Việt Nam</p>
+                </div>
+            </div>
+            <div class="text-center pt-3 border-top mt-3">
+                &copy; 2026 - Fruit_PRJ - <a asp-page="/Privacy">Quyền riêng tư</a>
+            </div>
         </div>
     </footer>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-
-    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
