@@ -31,6 +31,21 @@ namespace Fruit_PRJ.Services
 
         // ============================
 
+        public List<Order> GetOrdersByCustomer(int accountId)
+        {
+            return _context.Orders
+                .Where(o => o.AccountId == accountId)
+                .OrderByDescending(o => o.OrderDate) // Đơn hàng mới nhất lên đầu
+                .ToList();
+        }
+
+        public Order? GetOrderByCode(string orderCode, int accountId)
+        {
+            return _context.Orders
+                .Include(o => o.OrderItems) // Load danh sách sản phẩm trong đơn hàng
+                .FirstOrDefault(o => o.OrderCode == orderCode && o.AccountId == accountId);
+        }
+
         public OrderResult CreateOrder(Order order, List<CartViewModel> cartItems)
         {
             if (order == null || !cartItems.Any())

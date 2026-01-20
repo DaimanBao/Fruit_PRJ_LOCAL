@@ -1,0 +1,100 @@
+﻿@page "{code}"
+@model Fruit_PRJ.Pages.Customer.OrderDetailModel
+@{
+    ViewData["Title"] = "Chi tiết đơn hàng #" + Model.Order.OrderCode;
+}
+
+<div class="container py-5">
+    <div class="mb-4">
+        <a asp-page="/Customer/Orders" class="text-decoration-none text-success fw-bold">
+            <i class="fa-solid fa-arrow-left me-1"></i> Quay lại danh sách
+        </a>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm rounded-4 mb-4">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold mb-4">Sản phẩm đã đặt</h5>
+                    <div class="table-responsive">
+                        <table class="table align-middle">
+                            <thead class="table-light">
+                                <tr class="small text-uppercase">
+                                    <th>Sản phẩm</th>
+                                    <th class="text-center">Số lượng</th>
+                                    <th class="text-end">Đơn giá</th>
+                                    <th class="text-end">Thành tiền</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.Order.OrderItems)
+                                {
+                                    <tr>
+                                        <td>
+                                            <div class="fw-bold text-dark">@item.ProductName</div>
+                                            <small class="text-muted">Đơn vị: @item.UnitName</small>
+                                        </td>
+                                        <td class="text-center">@item.Quantity</td>
+                                        <td class="text-end">@item.Price.ToString("N0") đ</td>
+                                        <td class="text-end fw-bold">@item.SubTotal.ToString("N0") đ</td>
+                                    </tr>
+                                }
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="3" class="text-end fw-bold">Tổng cộng:</td>
+                                    <td class="text-end fw-bold fs-5 text-success">@Model.Order.TotalAmount.ToString("N0") đ</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold mb-3">Ghi chú đơn hàng</h5>
+                    <p class="text-muted mb-0">@(string.IsNullOrEmpty(Model.Order.Note) ? "Không có ghi chú nào." : Model.Order.Note)</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm rounded-4 mb-4 bg-light">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold mb-3">Thông tin nhận hàng</h5>
+                    <div class="mb-3">
+                        <small class="text-muted d-block text-uppercase fw-bold" style="font-size: 0.7rem;">Người nhận</small>
+                        <span class="fw-bold">@Model.Order.CustomerName</span>
+                    </div>
+                    <div class="mb-3">
+                        <small class="text-muted d-block text-uppercase fw-bold" style="font-size: 0.7rem;">Số điện thoại</small>
+                        <span>@Model.Order.CustomerPhone</span>
+                    </div>
+                    <div class="mb-0">
+                        <small class="text-muted d-block text-uppercase fw-bold" style="font-size: 0.7rem;">Địa chỉ</small>
+                        <span>@Model.Order.ShippingAddress</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold mb-3">Thanh toán</h5>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="small text-muted">Phương thức:</span>
+                        <span class="small fw-bold">@Model.GetPaymentMethodName(Model.Order.PaymentMethod)</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="small text-muted">Thời gian đặt:</span>
+                        <span class="small">@Model.Order.OrderDate.ToString("dd/MM/yyyy HH:mm")</span>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <span class="small text-muted">Mã vận đơn:</span>
+                        <span class="small fw-bold text-success">#@Model.Order.OrderCode</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

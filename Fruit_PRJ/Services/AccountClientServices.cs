@@ -15,6 +15,11 @@ namespace Fruit_PRJ.Services
             _utilities = utilities;
         }
 
+        public Account? GetById(int userId)
+        {
+            return _dbContext.Accounts.Find(userId);
+        }
+
         public ServiceResult RegisterCustomer(Account model)
         {
             if (string.IsNullOrWhiteSpace(model.Email) || string.IsNullOrWhiteSpace(model.PasswordHash))

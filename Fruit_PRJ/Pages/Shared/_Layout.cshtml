@@ -93,6 +93,43 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             border-radius: 12px;
         }
+
+            .dropdown-menu.animate {
+                animation-duration: 0.3s;
+                -webkit-animation-duration: 0.3s;
+                animation-fill-mode: both;
+                -webkit-animation-fill-mode: both;
+            }
+
+        @@keyframes slideIn {
+            0% {
+                transform: translateY(1rem);
+                opacity: 0;
+            }
+
+            100% {
+                transform: translateY(0rem);
+                opacity: 1;
+            }
+        }
+
+        .slideIn {
+            -webkit-animation-name: slideIn;
+            animation-name: slideIn;
+        }
+
+        .dropdown-item {
+            transition: all 0.2s;
+            border-radius: 8px;
+            margin: 0 8px;
+            width: calc(100% - 16px);
+        }
+
+            .dropdown-item:hover {
+                background-color: #f0fdf4; 
+                color: var(--primary-color);
+                transform: translateX(5px);
+            }
     </style>
 </head>
 <body>
@@ -138,34 +175,58 @@
 
                         @if (HttpContextAccessor.HttpContext?.Session.GetInt32("CustomerId") != null)
                         {
-                        <div class="dropdown">
-                            <a class="icon-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                                <i class="fa-solid fa-circle-user text-success"></i>
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-3">
-                                <li class="dropdown-header text-dark fw-bold">
-                                    Xin chào, @HttpContextAccessor.HttpContext.Session.GetString("CustomerName")
-                                </li>
+                            <div class="dropdown">
+                                <a class="icon-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fa-solid fa-circle-user text-success"></i>
+                                    <span class="d-none d-lg-inline ms-1 small fw-bold text-dark">
+                                        @HttpContextAccessor.HttpContext.Session.GetString("CustomerName")
+                                    </span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-3 animate slideIn">
+                                    <li class="dropdown-header border-bottom mb-2">
+                                        <small class="text-muted">Tài khoản của bạn</small>
+                                    </li>
 
-                                @{
-                                    var role = HttpContextAccessor.HttpContext.Session.GetInt32("CustomerRole");
-                                }
-                                @if (role == 1 || role == 2)
-                                {
-                                    <li><a class="dropdown-item" href="/Admin"><i class="fa-solid fa-gauge me-2 text-primary"></i>Quản trị</a></li>
-                                }
+                                    <li>
+                                        <a class="dropdown-item py-2" asp-page="/Customer/Index">
+                                            <i class="fa-solid fa-user-gear me-2 text-secondary"></i>Hồ sơ cá nhân
+                                        </a>
+                                    </li>
 
-                                <li><a class="dropdown-item" asp-page="/Account/Profile"><i class="fa-solid fa-user-pen me-2"></i>Hồ sơ</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item text-danger" asp-page="/Login_Logout/Logout"><i class="fa-solid fa-right-from-bracket me-2"></i>Đăng xuất</a></li>
-                            </ul>
-                        </div>
+                                    <li>
+                                        <a class="dropdown-item py-2" asp-page="/Customer/Orders">
+                                            <i class="fa-solid fa-clock-rotate-left me-2 text-secondary"></i>Lịch sử đơn hàng
+                                        </a>
+                                    </li>
+
+                                    @{
+                                        var role = HttpContextAccessor.HttpContext.Session.GetInt32("CustomerRole");
+                                    }
+                                    @if (role == 1 || role == 2)
+                                    {
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li>
+                                            <a class="dropdown-item py-2 text-primary fw-bold" href="/Admin">
+                                                <i class="fa-solid fa-gauge-high me-2"></i>Trang quản trị
+                                            </a>
+                                        </li>
+                                    }
+
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                        <a class="dropdown-item py-2 text-danger" asp-page="/Login_Logout/Logout">
+                                            <i class="fa-solid fa-right-from-bracket me-2"></i>Đăng xuất
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
                         }
                         else
                         {
-                        <a asp-page="/Login_Logout/Index" class="icon-link" title="Đăng nhập">
-                            <i class="fa-regular fa-circle-user"></i>
-                        </a>
+                            <a asp-page="/Login_Logout/Index" class="icon-link" title="Đăng nhập">
+                                <i class="fa-regular fa-circle-user"></i>
+                                <span class="d-none d-lg-inline ms-1 small fw-bold text-dark">Đăng nhập</span>
+                            </a>
                         }
                     </div>
                 </div>
