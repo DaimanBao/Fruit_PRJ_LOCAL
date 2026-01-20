@@ -70,7 +70,7 @@ namespace Fruit_PRJ.Services
                 order.OrderCode = _utilities.GenerateOrderCode();
                 order.OrderDate = DateTime.Now;
                 order.CreatedAt = DateTime.Now;
-                order.Status = 1; // 1: Chờ xử lý
+                order.Status = 1; 
 
                 order.TotalQuantity = cartItems.Sum(x => x.Quantity);
                 order.TotalAmount = cartItems.Sum(x => x.SubTotal);
@@ -79,10 +79,10 @@ namespace Fruit_PRJ.Services
                 {
                     var product = _context.Products.Find(item.Product.Id);
 
-                    // Nếu không đủ hàng, phải Rollback rồi mới Return
+                   
                     if (product == null || product.Stock < item.Quantity)
                     {
-                        transaction.Rollback(); // Đảm bảo mọi thứ quay lại ban đầu
+                        transaction.Rollback(); 
                         return new OrderResult
                         {
                             Success = false,
@@ -105,13 +105,13 @@ namespace Fruit_PRJ.Services
                 _context.Orders.Add(order);
                 _context.SaveChanges();
 
-                transaction.Commit(); // Hoàn tất giao dịch
+                transaction.Commit(); 
 
                 return new OrderResult { Success = true, Order = order };
             }
             catch (Exception ex)
             {
-                transaction.Rollback(); // Nếu lỗi thì trả lại dữ liệu cũ
+                transaction.Rollback(); 
                 return new OrderResult { Success = false, Error = "Lỗi hệ thống: " + ex.Message };
             }
         }
