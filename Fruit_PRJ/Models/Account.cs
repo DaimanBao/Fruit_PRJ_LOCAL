@@ -26,4 +26,6 @@ public partial class Account
     public string Phone { get; set; } = null!;
 
     public string? Address { get; set; }
+
+    public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
 }

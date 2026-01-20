@@ -7,11 +7,11 @@ namespace Fruit_PRJ.Pages.Checkout
     public class SuccessModel : PageModel
     {
         public string OrderCode { get; set; } = string.Empty;
-        public int PaymentMethod { get; set; } 
+        public int PaymentMethod { get; set; }
 
         public void OnGet(string code, int payMethod)
         {
-            OrderCode = code;
+            OrderCode = code;   
             PaymentMethod = payMethod;
         }
     }

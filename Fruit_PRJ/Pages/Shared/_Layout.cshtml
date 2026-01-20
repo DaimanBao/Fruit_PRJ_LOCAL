@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="utf-8" />
@@ -10,69 +12,161 @@
 
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
     <style>
+        :root {
+            --primary-color: #28a745;
+            --secondary-color: #ffc107;
+        }
+
         body {
             font-family: 'Quicksand', sans-serif;
+            background-color: #fdfdfd;
+        }
+
+        /* Navbar Styling */
+        .navbar {
+            transition: all 0.3s;
         }
 
         .navbar-brand {
             font-weight: 700;
-            color: #28a745 !important;
+            color: var(--primary-color) !important;
+            font-size: 1.5rem;
         }
 
-        .cart-icon {
-            position: relative;
-            font-size: 1.2rem;
+        .nav-link {
+            font-weight: 600;
+            transition: color 0.2s;
         }
+
+            .nav-link:hover {
+                color: var(--primary-color) !important;
+            }
+
+        /* Cart & User Icons */
+        .icon-link {
+            position: relative;
+            color: #333;
+            font-size: 1.3rem;
+            padding: 0 10px;
+            transition: transform 0.2s;
+        }
+
+            .icon-link:hover {
+                transform: scale(1.1);
+                color: var(--primary-color);
+            }
 
         .cart-badge {
             position: absolute;
-            top: -8px;
-            right: -12px;
-            background: #ffc107;
+            top: -5px;
+            right: 0px;
+            background: var(--secondary-color);
             color: #000;
             font-size: 0.7rem;
-            padding: 2px 6px;
+            font-weight: 700;
+            min-width: 18px;
+            height: 18px;
             border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #fff;
+        }
+
+        /* Footer Styling */
+        footer {
+            background-color: #f8f9fa;
+            border-top: 1px solid #eee;
+        }
+
+        .footer-title {
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        /* Dropdown custom */
+        .dropdown-menu {
+            border: none;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-radius: 12px;
         }
     </style>
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm">
+    <header class="sticky-top bg-white shadow-sm">
+        <nav class="navbar navbar-expand-lg navbar-light">
             <div class="container">
                 <a class="navbar-brand" asp-page="/Index">
                     <i class="fa-solid fa-seedling me-2"></i>FRUIT STORE
                 </a>
 
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse">
+                <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                <div class="collapse navbar-collapse" id="navbarMain">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link text-dark fw-bold" asp-page="/Index">Trang chủ</a>
+                            <a class="nav-link" asp-page="/Index">Trang chủ</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark fw-bold" asp-page="/Products/Index">Sản phẩm</a>
+                            <a class="nav-link" asp-page="/Products/Index">Sản phẩm</a>
                         </li>
                     </ul>
 
                     <div class="d-flex align-items-center">
-                        <form class="me-3 d-none d-md-flex" action="/san-pham" method="get">
+                        <form class="me-3 d-none d-lg-flex" action="/san-pham" method="get">
                             <div class="input-group input-group-sm">
-                                <input name="searchTerm" class="form-control" type="search" placeholder="Tìm trái cây...">
-                                <button class="btn btn-success" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                                <input name="searchTerm" class="form-control border-success" style="border-radius: 20px 0 0 20px;" type="search" placeholder="Tìm trái cây...">
+                                <button class="btn btn-success" style="border-radius: 0 20px 20px 0;" type="submit">
+                                    <i class="fa-solid fa-magnifying-glass"></i>
+                                </button>
                             </div>
                         </form>
 
-                        <a asp-page="/Cart/Index" class="nav-link text-dark cart-icon me-3">
+                        @{
+                            // Giả định logic lấy số lượng từ Session (Bạn cần thay đổi theo thực tế logic Cart của bạn)
+                            var cartCount = HttpContextAccessor.HttpContext?.Session.GetInt32("CartCount") ?? 0;
+                        }
+                        <a asp-page="/Cart/Index" class="icon-link" title="Giỏ hàng">
                             <i class="fa-solid fa-basket-shopping"></i>
-                            <span class="cart-badge">@* Logic lấy số lượng giỏ hàng *@ 0</span>
+                            <span class="cart-badge">@cartCount</span>
                         </a>
 
-                        <a href="#" class="nav-link text-dark"><i class="fa-regular fa-circle-user fs-5"></i></a>
+                        @if (HttpContextAccessor.HttpContext?.Session.GetInt32("CustomerId") != null)
+                        {
+                        <div class="dropdown">
+                            <a class="icon-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                <i class="fa-solid fa-circle-user text-success"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-3">
+                                <li class="dropdown-header text-dark fw-bold">
+                                    Xin chào, @HttpContextAccessor.HttpContext.Session.GetString("CustomerName")
+                                </li>
+
+                                @{
+                                    var role = HttpContextAccessor.HttpContext.Session.GetInt32("CustomerRole");
+                                }
+                                @if (role == 1 || role == 2)
+                                {
+                                    <li><a class="dropdown-item" href="/Admin"><i class="fa-solid fa-gauge me-2 text-primary"></i>Quản trị</a></li>
+                                }
+
+                                <li><a class="dropdown-item" asp-page="/Account/Profile"><i class="fa-solid fa-user-pen me-2"></i>Hồ sơ</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item text-danger" asp-page="/Login_Logout/Logout"><i class="fa-solid fa-right-from-bracket me-2"></i>Đăng xuất</a></li>
+                            </ul>
+                        </div>
+                        }
+                        else
+                        {
+                        <a asp-page="/Login_Logout/SignIn_SignUp" class="icon-link" title="Đăng nhập">
+                            <i class="fa-regular fa-circle-user"></i>
+                        </a>
+                        }
                     </div>
                 </div>
             </div>
@@ -80,33 +174,50 @@
     </header>
 
     <div class="container">
-        <main role="main" class="py-4">
+        <main role="main" class="py-5" style="min-height: 70vh;">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted bg-light">
-        <div class="container py-4">
-            <div class="row">
-                <div class="col-md-4">
-                    <h6 class="fw-bold text-success">Về Fruit Store</h6>
-                    <p class="small">Cung cấp trái cây nhập khẩu và đặc sản vùng miền tươi ngon, an toàn cho sức khỏe gia đình bạn.</p>
+    <footer class="mt-5">
+        <div class="container py-5">
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6">
+                    <h5 class="footer-title text-success"><i class="fa-solid fa-seedling me-2"></i>FRUIT STORE</h5>
+                    <p class="small text-muted">Chúng tôi cam kết cung cấp các loại trái cây tươi ngon, có nguồn gốc rõ ràng, đảm bảo tiêu chuẩn VietGAP và nhập khẩu chính ngạch.</p>
+                    <div class="social-links d-flex gap-3">
+                        <a href="#" class="text-success fs-5"><i class="fa-brands fa-facebook"></i></a>
+                        <a href="#" class="text-success fs-5"><i class="fa-brands fa-tiktok"></i></a>
+                        <a href="#" class="text-success fs-5"><i class="fa-brands fa-instagram"></i></a>
+                    </div>
                 </div>
-                <div class="col-md-4">
-                    <h6 class="fw-bold">Liên kết nhanh</h6>
+                <div class="col-lg-2 col-6">
+                    <h6 class="footer-title">Cửa hàng</h6>
                     <ul class="list-unstyled small">
-                        <li><a asp-page="/Index" class="text-decoration-none text-muted">Trang chủ</a></li>
-                        <li><a asp-page="/Products/Index" class="text-decoration-none text-muted">Sản phẩm</a></li>
+                        <li class="mb-2"><a asp-page="/Index" class="text-decoration-none text-muted">Trang chủ</a></li>
+                        <li class="mb-2"><a asp-page="/Products/Index" class="text-decoration-none text-muted">Tất cả sản phẩm</a></li>
+                        <li class="mb-2"><a href="#" class="text-decoration-none text-muted">Khuyến mãi</a></li>
                     </ul>
                 </div>
-                <div class="col-md-4">
-                    <h6 class="fw-bold">Hỗ trợ khách hàng</h6>
-                    <p class="small mb-1"><i class="fa-solid fa-phone me-2"></i> Hotline: 1900 1234</p>
-                    <p class="small"><i class="fa-solid fa-location-dot me-2"></i> Hà Nội, Việt Nam</p>
+                <div class="col-lg-2 col-6">
+                    <h6 class="footer-title">Hỗ trợ</h6>
+                    <ul class="list-unstyled small">
+                        <li class="mb-2"><a href="#" class="text-decoration-none text-muted">Chính sách giao hàng</a></li>
+                        <li class="mb-2"><a href="#" class="text-decoration-none text-muted">Chính sách hoàn tiền</a></li>
+                        <li class="mb-2"><a asp-page="/Privacy" class="text-decoration-none text-muted">Bảo mật thông tin</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <h6 class="footer-title">Liên hệ</h6>
+                    <ul class="list-unstyled small">
+                        <li class="mb-2 text-muted"><i class="fa-solid fa-location-dot me-2 text-success"></i> 123 Đường Láng, Đống Đa, Hà Nội</li>
+                        <li class="mb-2 text-muted"><i class="fa-solid fa-phone me-2 text-success"></i> Hotline: 1900 1234</li>
+                        <li class="mb-2 text-muted"><i class="fa-solid fa-envelope me-2 text-success"></i> support@fruitstore.vn</li>
+                    </ul>
                 </div>
             </div>
-            <div class="text-center pt-3 border-top mt-3">
-                &copy; 2026 - Fruit_PRJ - <a asp-page="/Privacy">Quyền riêng tư</a>
+            <div class="text-center pt-4 border-top mt-4 text-muted small">
+                &copy; 2026 - <strong>Fruit Store Project</strong>. Đã đăng ký bản quyền.
             </div>
         </div>
     </footer>
@@ -114,5 +225,6 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

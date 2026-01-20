@@ -36,40 +36,62 @@ namespace Fruit_PRJ.Services
             if (order == null || !cartItems.Any())
                 return new OrderResult { Success = false, Error = "Dữ liệu không hợp lệ" };
 
-            order.CustomerName = _utilities.CleanDataInput(order.CustomerName);
-            order.CustomerPhone = _utilities.CleanDataInput(order.CustomerPhone);
-            order.ShippingAddress = _utilities.CleanDataInput(order.ShippingAddress);
-            order.Note = _utilities.CleanDataInput(order.Note);
-
-            order.OrderCode = _utilities.GenerateOrderCode();
-            order.OrderDate = DateTime.Now;
-            order.CreatedAt = DateTime.Now;
-            order.Status = 1;
-
-            order.TotalQuantity = cartItems.Sum(x => x.Quantity);
-            order.TotalAmount = cartItems.Sum(x => x.SubTotal);
-
-            foreach (var item in cartItems)
+            // Bắt đầu một Transaction để đảm bảo nếu trừ kho lỗi thì đơn hàng không được tạo
+            using var transaction = _context.Database.BeginTransaction();
+            try
             {
-                order.OrderItems.Add(new OrderItem
+                order.CustomerName = _utilities.CleanDataInput(order.CustomerName);
+                order.CustomerPhone = _utilities.CleanDataInput(order.CustomerPhone);
+                order.ShippingAddress = _utilities.CleanDataInput(order.ShippingAddress);
+                order.Note = _utilities.CleanDataInput(order.Note);
+
+                order.OrderCode = _utilities.GenerateOrderCode();
+                order.OrderDate = DateTime.Now;
+                order.CreatedAt = DateTime.Now;
+                order.Status = 1; // 1: Chờ xử lý
+
+                order.TotalQuantity = cartItems.Sum(x => x.Quantity);
+                order.TotalAmount = cartItems.Sum(x => x.SubTotal);
+
+                foreach (var item in cartItems)
                 {
-                    ProductId = item.Product.Id,
-                    ProductName = item.Product.Name,
-                    UnitName = item.Product.Unit.Name,
-                    Price = item.Product.Price,
-                    Quantity = item.Quantity,
-                    SubTotal = item.SubTotal
-                });
+                    var product = _context.Products.Find(item.Product.Id);
+
+                    // Nếu không đủ hàng, phải Rollback rồi mới Return
+                    if (product == null || product.Stock < item.Quantity)
+                    {
+                        transaction.Rollback(); // Đảm bảo mọi thứ quay lại ban đầu
+                        return new OrderResult
+                        {
+                            Success = false,
+                            Error = $"Sản phẩm {item.Product.Name} không đủ hàng (Còn lại: {product?.Stock ?? 0})"
+                        };
+                    }
+
+                    product.Stock -= item.Quantity;
+                    order.OrderItems.Add(new OrderItem
+                    {
+                        ProductId = item.Product.Id,
+                        ProductName = item.Product.Name,
+                        UnitName = item.Product.Unit.Name,
+                        Price = item.Product.Price,
+                        Quantity = item.Quantity,
+                        SubTotal = item.SubTotal
+                    });
+                }
+
+                _context.Orders.Add(order);
+                _context.SaveChanges();
+
+                transaction.Commit(); // Hoàn tất giao dịch
+
+                return new OrderResult { Success = true, Order = order };
             }
-
-            _context.Orders.Add(order);
-            _context.SaveChanges();
-
-            return new OrderResult
+            catch (Exception ex)
             {
-                Success = true,
-                Order = order
-            };
+                transaction.Rollback(); // Nếu lỗi thì trả lại dữ liệu cũ
+                return new OrderResult { Success = false, Error = "Lỗi hệ thống: " + ex.Message };
+            }
         }
 
         // ============================

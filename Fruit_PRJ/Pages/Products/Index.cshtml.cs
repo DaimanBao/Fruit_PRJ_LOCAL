@@ -60,39 +60,19 @@ namespace Fruit_PRJ.Pages.Products
             TotalItems = total;
         }
 
-        public IActionResult OnPostAddToCart(int id)
+        public IActionResult OnPostAddToCart(int id, int qty = 1) // Thêm giá trị mặc định = 1
         {
-            var cart = HttpContext.Session.GetObject<List<CartItem>>("CART") ?? new();
-
             var product = _productServices.GetProductById(id);
-            if (product == null) return RedirectToPage();
-
-            var item = cart.FirstOrDefault(x => x.ProductId == id);
-
-            if (item == null)
+            if (product != null)
             {
-                cart.Add(new CartItem
-                {
-                    ProductId = id,
-                    Name = product.Name,
-                    Price = product.Price,
-                    Quantity = 1,
-                    Image = product.ProductImages.FirstOrDefault()?.ImageUrl
-                });
+                CartHelper.Add(HttpContext.Session, product, qty);
             }
-            else
-            {
-                item.Quantity++;
-            }
-
-            HttpContext.Session.SetObject("CART", cart);
-
-            return RedirectToPage();
+            return RedirectToPage("/Cart/Index");
         }
 
         public IActionResult OnPostBuyNow(int id)
         {
-            OnPostAddToCart(id);
+            OnPostAddToCart(id, 1); // Đảm bảo truyền đủ id và qty
             return RedirectToPage("/Cart/Index");
         }
     }

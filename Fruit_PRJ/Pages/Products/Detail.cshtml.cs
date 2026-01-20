@@ -1,4 +1,4 @@
-using Fruit_PRJ.Extensions;
+﻿using Fruit_PRJ.Extensions;
 using Fruit_PRJ.Models;
 using Fruit_PRJ.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -19,19 +19,32 @@ namespace Fruit_PRJ.Pages.Products
 
         public void OnGet(int? id)
         {
+            if (id == null) RedirectToPage("/Products/Index");
             Product = _productServices.GetProductById(id.Value);
+
+            if (Product == null || Product.IsDeleted) RedirectToPage("/Products/Index");
         }
 
         public IActionResult OnPostAddToCart(int id, int qty)
         {
-            CartHelper.Add(HttpContext.Session, id, qty);
+            var product = _productServices.GetProductById(id);
+            if (product != null)
+            {
+                // Phải truyền 'product' thay vì 'id' để khớp với CartHelper mới
+                CartHelper.Add(HttpContext.Session, product, qty);
+            }
             return RedirectToPage("/Cart/Index");
         }
 
         public IActionResult OnPostBuyNow(int id, int qty)
         {
-            CartHelper.Add(HttpContext.Session, id, qty);
-            return RedirectToPage("/Checkout/Index");
+            var product = _productServices.GetProductById(id);
+            if (product != null)
+            {
+                CartHelper.Add(HttpContext.Session, product, qty);
+                return RedirectToPage("/Checkout/Index"); // Thường mua ngay sẽ tới trang thanh toán
+            }
+            return RedirectToPage("/Products/Index");
         }
     }
 }

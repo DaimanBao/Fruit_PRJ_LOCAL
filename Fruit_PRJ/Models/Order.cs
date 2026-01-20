@@ -29,5 +29,9 @@ public partial class Order
 
     public DateTime CreatedAt { get; set; }
 
+    public int AccountId { get; set; }
+
+    public virtual Account Account { get; set; } = null!;
+
     public virtual ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
 }

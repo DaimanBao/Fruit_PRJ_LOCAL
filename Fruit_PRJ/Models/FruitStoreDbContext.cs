@@ -91,6 +91,11 @@ public partial class FruitStoreDbContext : DbContext
                 .HasColumnType("datetime");
             entity.Property(e => e.ShippingAddress).HasMaxLength(255);
             entity.Property(e => e.TotalAmount).HasColumnType("decimal(18, 2)");
+
+            entity.HasOne(d => d.Account).WithMany(p => p.Orders)
+                .HasForeignKey(d => d.AccountId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Orders_Accounts");
         });
 
         modelBuilder.Entity<OrderItem>(entity =>

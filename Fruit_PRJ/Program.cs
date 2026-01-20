@@ -1,4 +1,4 @@
-using Fruit_PRJ.Models;
+﻿using Fruit_PRJ.Models;
 using Fruit_PRJ.Services;
 using Fruit_Store_PRJ.Services;
 using Microsoft.EntityFrameworkCore;
@@ -17,6 +17,7 @@ builder.Services.AddScoped<ProductServices>();
 builder.Services.AddScoped<ImageServices>();
 builder.Services.AddScoped<OrderServices>();
 builder.Services.AddScoped<AccountServices>();
+builder.Services.AddScoped<AccountClientServices>();
 
 //Singleton Services    
 builder.Services.AddSingleton<UtilitiesServices>();
@@ -28,6 +29,9 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
+
+
+builder.Services.AddHttpContextAccessor();
 
 //STRIPE
 Stripe.StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
@@ -47,6 +51,7 @@ app.UseHttpsRedirection();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();

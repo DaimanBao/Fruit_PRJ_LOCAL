@@ -135,12 +135,17 @@
 </div>
 
 <script>
+        let maxStock = @Model.Product.Stock; 
+
     function plus() {
         let q = document.getElementById("qty");
-        q.value = parseInt(q.value) + 1;
+        if (parseInt(q.value) < maxStock) {
+            q.value = parseInt(q.value) + 1;
+        } else {
+            alert("Số lượng trong kho chỉ còn " + maxStock);
+        }
         syncQty();
     }
-
     function minus() {
         let q = document.getElementById("qty");
         if (parseInt(q.value) > 1) q.value = parseInt(q.value) - 1;

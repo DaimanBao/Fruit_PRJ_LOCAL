@@ -1,0 +1,76 @@
+﻿@page "/dang-nhap"
+@model Fruit_PRJ.Pages.Login_Logout.IndexModel
+@{
+    ViewData["Title"] = "Đăng nhập & Đăng ký";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-white pb-0 border-0">
+                    <ul class="nav nav-pills nav-justified mb-3" id="pills-tab" role="tablist">
+                        <li class="nav-item">
+                            <button class="nav-link active fw-bold" id="tab-login" data-bs-toggle="pill" data-bs-target="#login-form">ĐĂNG NHẬP</button>
+                        </li>
+                        <li class="nav-item">
+                            <button class="nav-link fw-bold" id="tab-register" data-bs-toggle="pill" data-bs-target="#register-form">ĐĂNG KÝ</button>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-body p-4">
+                    @if (Model.ErrorMessage != null)
+                    {
+                        <div class="alert alert-danger">@Model.ErrorMessage</div>
+                    }
+                    @if (Model.SuccessMessage != null)
+                    {
+                        <div class="alert alert-success">@Model.SuccessMessage</div>
+                    }
+
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="login-form">
+                            <form asp-page-handler="Login" method="post">
+                                <div class="mb-3">
+                                    <label class="form-label">Email</label>
+                                    <input asp-for="Email" class="form-control" placeholder="nhap@email.com" required />
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Mật khẩu</label>
+                                    <input asp-for="Password" type="password" class="form-control" required />
+                                </div>
+                                <button type="submit" class="btn btn-success w-100 py-2 fw-bold">ĐĂNG NHẬP</button>
+                            </form>
+                        </div>
+
+                        <div class="tab-pane fade" id="register-form">
+                            <form asp-page-handler="Register" method="post">
+                                <div class="mb-3">
+                                    <label class="form-label">Tên người dùng</label>
+                                    <input asp-for="NewAccount.Username" class="form-control" required />
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Email</label>
+                                    <input asp-for="NewAccount.Email" type="email" class="form-control" required />
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Số điện thoại</label>
+                                    <input asp-for="NewAccount.Phone" class="form-control" required />
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Mật khẩu</label>
+                                    <input asp-for="NewAccount.PasswordHash" type="password" class="form-control" required />
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Xác nhận mật khẩu</label>
+                                    <input asp-for="ConfirmPassword" type="password" class="form-control" required />
+                                </div>
+                                <button type="submit" class="btn btn-outline-success w-100 py-2 fw-bold">TẠO TÀI KHOẢN</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
