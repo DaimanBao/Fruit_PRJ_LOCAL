@@ -29,7 +29,6 @@ namespace Fruit_PRJ.Pages.Customer
             var userId = HttpContext.Session.GetInt32("CustomerId");
             if (userId == null) return RedirectToPage("/Login_Logout/Index");
 
-            // Gọi qua Service thay vì DbContext
             var user = _accountService.GetById(userId.Value);
             if (user == null) return NotFound();
 
@@ -46,10 +45,9 @@ namespace Fruit_PRJ.Pages.Customer
 
             if (result.Success)
             {
-                // Cập nhật Session để hiển thị trên Layout ngay lập tức
                 HttpContext.Session.SetString("CustomerName", UserProfile.Username);
                 SuccessMessage = "Cập nhật hồ sơ thành công!";
-                return RedirectToPage(); // Post-Redirect-Get pattern
+                return RedirectToPage(); 
             }
 
             ErrorMessage = result.Error;

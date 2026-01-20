@@ -30,7 +30,6 @@ namespace Fruit_PRJ.Pages.Products
             var product = _productServices.GetProductById(id);
             if (product != null)
             {
-                // Phải truyền 'product' thay vì 'id' để khớp với CartHelper mới
                 CartHelper.Add(HttpContext.Session, product, qty);
             }
             return RedirectToPage("/Cart/Index");
@@ -42,7 +41,7 @@ namespace Fruit_PRJ.Pages.Products
             if (product != null)
             {
                 CartHelper.Add(HttpContext.Session, product, qty);
-                return RedirectToPage("/Checkout/Index"); // Thường mua ngay sẽ tới trang thanh toán
+                return RedirectToPage("/Checkout/Index");
             }
             return RedirectToPage("/Products/Index");
         }

@@ -15,22 +15,29 @@ namespace Fruit_PRJ.Pages.Checkout
 
         public IActionResult OnGet(string code, string status)
         {
-            if (string.IsNullOrEmpty(code))
+            if (string.IsNullOrEmpty(code)) return RedirectToPage("/Index");
+
+            var order = _orderServices.GetOrderByCode(code, HttpContext.Session.GetInt32("AccountId") ?? 0); 
+            if (order == null) return RedirectToPage("/Index");
+
+        
+            if (order.Status >= 2)
             {
-                return RedirectToPage("/Index");
+                return RedirectToPage("/Checkout/Success", new { code = code });
             }
+
 
             if (status == "success")
             {
-                // Cập nhật trạng thái đơn hàng là "Đã thanh toán" (Ví dụ status = 2)
                 _orderServices.UpdatePaymentStatus(code, 2);
 
-                // Chuyển về trang thông báo thành công
+                HttpContext.Session.Remove("Cart");
+
                 return RedirectToPage("/Checkout/Success", new { code = code });
             }
             else
             {
-                return RedirectToPage("/Cart/Index", new { message = "Thanh toán không thành công. Vui lòng thử lại." });
+                return RedirectToPage("/Cart/Index", new { error = "Thanh toán thất bại" });
             }
         }
     }

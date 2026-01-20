@@ -22,19 +22,17 @@ namespace Fruit_PRJ.Pages.Customer
             if (userId == null)
                 return RedirectToPage("/Login_Logout/Index", new { returnUrl = "/Customer/Orders" });
 
-            // Gọi qua Service
             CustomerOrders = _orderServices.GetOrdersByCustomer(userId.Value);
 
             return Page();
         }
 
-        // Helper để hiển thị nhãn trạng thái
         public string GetStatusClass(int status) => status switch
         {
-            1 => "bg-warning text-dark", // Chờ xử lý
-            2 => "bg-primary",           // Đang giao
-            3 => "bg-success",           // Hoàn thành
-            4 => "bg-danger",            // Đã hủy
+            1 => "bg-warning text-dark", 
+            2 => "bg-primary",           
+            3 => "bg-success",           
+            4 => "bg-danger",            
             _ => "bg-secondary"
         };
 

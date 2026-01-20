@@ -124,7 +124,7 @@ namespace Fruit_Store_PRJ.Areas.Admin.Pages.Products
             }
 
             product.Status = status;
-            _productServices.UpdateStatus(product); // method riêng, KHÔNG đụng EditProduct
+            _productServices.UpdateStatus(product);
 
             TempData["Message"] = "Cập nhật trạng thái thành công.";
             return RedirectToPage("ProductDetail", new { id });
@@ -148,11 +148,10 @@ namespace Fruit_Store_PRJ.Areas.Admin.Pages.Products
                 return RedirectToPage("ProductDetail", new { id = productId });
             }
 
-            // Reset ảnh chính cũ
+            
             foreach (var img in product.ProductImages)
                 img.IsMain = false;
 
-            // Set ảnh mới
             image.IsMain = true;
 
             _productServices.UpdateMainImage(product);

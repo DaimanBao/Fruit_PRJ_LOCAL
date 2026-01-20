@@ -25,7 +25,6 @@ namespace Fruit_PRJ.Services
             _imageServices = imageServices;
         }
 
-        //ADMIN///////////////////////////////////////////////////////
         //Category//--------------------------------------------- 
 
         //Get All Categories
@@ -277,7 +276,6 @@ namespace Fruit_PRJ.Services
             product.ProductImages = images;
             _context.Products.Add(product);
             _context.SaveChanges();
-            // Implement product addition logic here
             return new ServiceResult
             {
                 Success = true
@@ -455,7 +453,6 @@ namespace Fruit_PRJ.Services
         }
 
         //Image
-
         public void UpdateMainImage(Product product)
         {
             if (product == null) return;

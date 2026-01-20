@@ -25,7 +25,6 @@ namespace Fruit_PRJ.Pages.Checkout
         public List<CartViewModel> CartItems { get; set; } = new();
         public decimal TotalAmount { get; set; }
 
-        // THÊM DÒNG NÀY: Để lưu thông báo lỗi khi tạo đơn thất bại
         [TempData]
         public string ErrorMessage { get; set; }
 
@@ -71,23 +70,22 @@ namespace Fruit_PRJ.Pages.Checkout
                 return Page();
             }
 
-            // Xóa giỏ hàng sau khi tạo đơn thành công
             HttpContext.Session.Remove("CART");
-            HttpContext.Session.Remove("CartCount"); // Xóa cả số lượng hiển thị trên Header
+            HttpContext.Session.Remove("CartCount"); 
 
-            // Nếu thanh toán Stripe
+
             if (Order.PaymentMethod == 3)
             {
                 return ProcessStripePayment(orderResult.Order);
             }
 
-            // SỬA TẠI ĐÂY: Truyền thêm payMethod để trang Success hiển thị đúng thông tin
             return RedirectToPage("/Checkout/Success", new
             {
                 code = orderResult.Order.OrderCode,
                 payMethod = orderResult.Order.PaymentMethod
             });
         }
+
         private IActionResult ProcessStripePayment(Order order)
         {
             var domain = $"{Request.Scheme}://{Request.Host}";
@@ -106,7 +104,6 @@ namespace Fruit_PRJ.Pages.Checkout
                 {
                     PriceData = new SessionLineItemPriceDataOptions
                     {
-                        // Lưu ý: Stripe tính theo đơn vị nhỏ nhất (với VND là đồng, không cần *100)
                         UnitAmount = (long)Math.Round(item.Product.Price, 0),
                         Currency = "vnd",
                         ProductData = new SessionLineItemPriceDataProductDataOptions { Name = item.Product.Name },

@@ -23,7 +23,6 @@ namespace Fruit_PRJ.Pages.Customer
             var userId = HttpContext.Session.GetInt32("CustomerId");
             if (userId == null) return RedirectToPage("/Login_Logout/Index");
 
-            // Lấy đơn hàng và kiểm tra quyền sở hữu (tránh khách hàng xem đơn của người khác bằng cách đổi code trên URL)
             var order = _orderServices.GetOrderByCode(code, userId.Value);
 
             if (order == null) return NotFound();

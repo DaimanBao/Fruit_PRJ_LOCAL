@@ -18,7 +18,7 @@ namespace Fruit_Store_PRJ.Areas.Admin.Pages
             _accountServices = accountServices;
         }
 
-        // Khai báo các thuộc tính hiển thị UI
+        // Cac thuoc tinh hien thi 
         public Dictionary<string, int> OrderStats { get; set; } = null!;
         public ProductServices.ProductStatisticDto ProductStats { get; set; } = null!;
         public AccountServices.AccountStatisticDto AccountStats { get; set; } = null!;
@@ -27,19 +27,18 @@ namespace Fruit_Store_PRJ.Areas.Admin.Pages
 
         public IActionResult OnGet()
         {
-            // Kiểm tra Login
+            //Kiem tra Login
             if (HttpContext.Session.GetInt32("AdminId") == null)
                 return RedirectToPage("/LoginAdmin", new { area = "Admin" });
 
-            // Lấy dữ liệu thống kê
             OrderStats = _orderServices.GetOrderStatistics();
             ProductStats = _productServices.GetProductStatistics();
             AccountStats = _accountServices.GetAccountStatistic();
 
-            // Lấy 5 đơn hàng mới nhất
+            //Lay 5 don hang moi nhat
             RecentOrders = _orderServices.GetAllOrdersAdmin().Take(5).ToList();
 
-            // Tính tổng doanh thu (Chỉ tính các đơn đã hoàn thành - Status == 3)
+            //Tinh tong doanh thu
             TotalRevenue = _orderServices.GetAllOrdersAdmin()
                             .Where(o => o.Status == 3)
                             .Sum(o => o.TotalAmount);

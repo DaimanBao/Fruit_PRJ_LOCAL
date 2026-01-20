@@ -32,8 +32,7 @@ namespace Fruit_PRJ.Pages.Cart
         public IActionResult OnPostIncrease(int id)
         {
             var cart = HttpContext.Session.GetObject<List<CartItem>>("CART") ?? new();
-            var item = cart.FirstOrDefault(x => x.ProductId == id); // Dùng FirstOrDefault để an toàn
-
+            var item = cart.FirstOrDefault(x => x.ProductId == id); 
             if (item != null)
             {
                 item.Quantity++;
@@ -67,19 +66,15 @@ namespace Fruit_PRJ.Pages.Cart
             return RedirectToPage();
         }
 
-        // Kiểm tra đăng nhập trước khi đi thanh toán
         public IActionResult OnGetCheckout()
         {
-            // 1. Kiểm tra login thủ công
             var userId = HttpContext.Session.GetInt32("CustomerId");
             if (userId == null)
             {
                 ErrorMessage = "Vui lòng đăng nhập để tiến hành thanh toán!";
-                // SỬA TẠI ĐÂY: Trỏ đúng vào tên file .cshtml bạn đang có
                 return RedirectToPage("/Login_Logout/Index", new { returnUrl = "/gio-hang" });
             }
 
-            // 2. Kiểm tra giỏ hàng có đồ không
             var cart = HttpContext.Session.GetObject<List<CartItem>>("CART") ?? new();
             if (!cart.Any())
             {

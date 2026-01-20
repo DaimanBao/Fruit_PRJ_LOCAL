@@ -16,7 +16,6 @@ namespace Fruit_PRJ.Pages.Login_Logout
             _accountClientService = accountClientService;
         }
 
-        // THÊM THUỘC TÍNH NÀY: Để hứng giá trị từ URL (ví dụ: ?returnUrl=/gio-hang)
         [BindProperty(SupportsGet = true)]
         public string? ReturnUrl { get; set; }
 
@@ -42,7 +41,6 @@ namespace Fruit_PRJ.Pages.Login_Logout
                 return Page();
             }
 
-            // Lưu Session
             HttpContext.Session.SetInt32("CustomerId", result.Account.Id);
             HttpContext.Session.SetString("CustomerName", result.Account.Username);
             HttpContext.Session.SetString("CustomerEmail", result.Account.Email);
@@ -50,7 +48,6 @@ namespace Fruit_PRJ.Pages.Login_Logout
             HttpContext.Session.SetString("CustomerPhone", result.Account.Phone ?? "");
             HttpContext.Session.SetString("CustomerAddress", result.Account.Address ?? "");
 
-            // SỬA TẠI ĐÂY: Kiểm tra nếu có trang cũ thì quay lại trang đó
             if (!string.IsNullOrEmpty(ReturnUrl) && Url.IsLocalUrl(ReturnUrl))
             {
                 return Redirect(ReturnUrl);
@@ -59,7 +56,6 @@ namespace Fruit_PRJ.Pages.Login_Logout
             return RedirectToPage("/Index");
         }
 
-        // Xử lý ĐĂNG KÝ dành cho Khách hàng
         public IActionResult OnPostRegister()
         {
             if (NewAccount.PasswordHash != ConfirmPassword)
@@ -68,7 +64,6 @@ namespace Fruit_PRJ.Pages.Login_Logout
                 return Page();
             }
 
-            // Gọi hàm RegisterCustomer (hàm này đã mặc định Role = 3 bên trong Service)
             var result = _accountClientService.RegisterCustomer(NewAccount);
 
             if (result.Success)

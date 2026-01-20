@@ -35,7 +35,7 @@ namespace Fruit_PRJ.Services
         {
             return _context.Orders
                 .Where(o => o.AccountId == accountId)
-                .OrderByDescending(o => o.OrderDate) // Đơn hàng mới nhất lên đầu
+                .OrderByDescending(o => o.OrderDate) 
                 .ToList();
         }
 
@@ -50,7 +50,7 @@ namespace Fruit_PRJ.Services
         public Order? GetOrderByCode(string orderCode, int accountId)
         {
             return _context.Orders
-                .Include(o => o.OrderItems) // Load danh sách sản phẩm trong đơn hàng
+                .Include(o => o.OrderItems)
                 .FirstOrDefault(o => o.OrderCode == orderCode && o.AccountId == accountId);
         }
 
@@ -59,7 +59,6 @@ namespace Fruit_PRJ.Services
             if (order == null || !cartItems.Any())
                 return new OrderResult { Success = false, Error = "Dữ liệu không hợp lệ" };
 
-            // Bắt đầu một Transaction để đảm bảo nếu trừ kho lỗi thì đơn hàng không được tạo
             using var transaction = _context.Database.BeginTransaction();
             try
             {
