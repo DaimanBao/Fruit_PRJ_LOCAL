@@ -1,0 +1,155 @@
+﻿@page "{id:int?}"
+@model Fruit_PRJ.Pages.Products.DetailModel
+
+<style>
+    /* Tùy chỉnh thêm để UI mượt mà hơn */
+    .product-detail-container {
+        background-color: #fff;
+        border-radius: 20px;
+        overflow: hidden;
+    }
+
+    .product-image-wrapper {
+        transition: transform 0.3s ease;
+    }
+
+        .product-image-wrapper:hover {
+            transform: scale(1.02);
+        }
+
+    .btn-qty {
+        width: 45px;
+        height: 45px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px !important;
+    }
+
+    #qty {
+        border: none;
+        font-weight: bold;
+        font-size: 1.1rem;
+        width: 60px;
+    }
+
+    .price-tag {
+        font-size: 2rem;
+        letter-spacing: -1px;
+    }
+
+    .badge-origin {
+        background-color: #e8f5e9;
+        color: #2e7d32;
+        padding: 8px 15px;
+        border-radius: 50px;
+        display: inline-block;
+        font-weight: 500;
+    }
+</style>
+
+<div class="container py-5">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/" class="text-decoration-none text-success">Trang chủ</a></li>
+            <li class="breadcrumb-item"><a href="/Products" class="text-decoration-none text-success">Sản phẩm</a></li>
+            <li class="breadcrumb-item active">@Model.Product.Name</li>
+        </ol>
+    </nav>
+
+    <div class="row g-lg-5 g-4 align-items-center">
+
+        <div class="col-md-6">
+            <div class="product-image-wrapper p-2">
+                <img src="@Model.Product.ProductImages.FirstOrDefault()?.ImageUrl"
+                     class="img-fluid rounded-4 shadow-sm w-100"
+                     style="object-fit: cover; max-height: 500px;"
+                     alt="@Model.Product.Name">
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="ps-lg-4">
+                <div class="badge-origin mb-3">
+                    <i class="fa-solid fa-earth-asia me-2"></i> Xuất xứ: @Model.Product.Origin.Name
+                </div>
+
+                <h1 class="display-5 fw-bold text-dark mb-2">@Model.Product.Name</h1>
+
+                <div class="price-tag fw-bold text-success mb-4">
+                    @Model.Product.Price.ToString("N0") <small class="fs-6 text-muted">đ / @Model.Product.Unit.Name</small>
+                </div>
+
+                <hr class="my-4 opacity-10">
+
+                <h5 class="fw-bold">Mô tả sản phẩm</h5>
+                <p class="text-secondary lh-lg mb-4">
+                    @Model.Product.Description
+                </p>
+
+                <div class="mb-4">
+                    <label class="form-label fw-semibold mb-3">Số lượng đặt hàng:</label>
+                    <div class="d-flex align-items-center shadow-sm border rounded-3 p-1" style="width: fit-content;">
+                        <button type="button" class="btn btn-light btn-qty" onclick="minus()">
+                            <i class="fa-solid fa-minus"></i>
+                        </button>
+
+                        <input id="qty" value="1" class="form-control text-center bg-transparent" readonly>
+
+                        <button type="button" class="btn btn-light btn-qty" onclick="plus()">
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-sm-6">
+                        <form method="post" asp-page-handler="BuyNow">
+                            <input type="hidden" name="id" value="@Model.Product.Id" />
+                            <input type="hidden" id="buyQty" name="qty" value="1" />
+                            <button class="btn btn-success btn-lg w-100 py-3 shadow-sm fw-bold">
+                                <i class="fa-solid fa-bolt me-2"></i> MUA NGAY
+                            </button>
+                        </form>
+                    </div>
+                    <div class="col-sm-6">
+                        <form method="post" asp-page-handler="AddToCart">
+                            <input type="hidden" name="id" value="@Model.Product.Id" />
+                            <input type="hidden" id="cartQty" name="qty" value="1" />
+                            <button class="btn btn-outline-success btn-lg w-100 py-3 shadow-sm fw-bold">
+                                <i class="fa-solid fa-cart-plus me-2"></i> THÊM GIỎ HÀNG
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="mt-4 pt-2">
+                    <div class="d-flex gap-4 text-muted small">
+                        <span><i class="fa-solid fa-truck-fast text-success me-2"></i>Giao hàng nhanh</span>
+                        <span><i class="fa-solid fa-shield-halved text-success me-2"></i>Bảo đảm chất lượng</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function plus() {
+        let q = document.getElementById("qty");
+        q.value = parseInt(q.value) + 1;
+        syncQty();
+    }
+
+    function minus() {
+        let q = document.getElementById("qty");
+        if (parseInt(q.value) > 1) q.value = parseInt(q.value) - 1;
+        syncQty();
+    }
+
+    function syncQty() {
+        let val = document.getElementById("qty").value;
+        document.getElementById("buyQty").value = val;
+        document.getElementById("cartQty").value = val;
+    }
+</script>

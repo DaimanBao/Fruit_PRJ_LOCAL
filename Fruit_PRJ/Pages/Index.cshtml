@@ -4,40 +4,140 @@
     ViewData["Title"] = "Trang chủ";
 }
 
+<style>
+    /* Hero Section */
+    .hero-banner {
+        background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1610832958506-aa56368176cf?q=80&w=2070&auto=format&fit=crop');
+        background-size: cover;
+        background-position: center;
+        border-radius: 30px;
+        color: white;
+        padding: 100px 0;
+        margin-bottom: 50px;
+    }
+
+    /* Feature Cards */
+    .feature-box {
+        transition: all 0.3s ease;
+        border: none;
+        border-radius: 20px;
+        background: #fff;
+    }
+
+        .feature-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08) !important;
+        }
+
+    .icon-circle {
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        margin-bottom: 15px;
+    }
+
+    /* Product Card */
+    .product-card-home {
+        border: none;
+        border-radius: 20px;
+        transition: all 0.3s ease;
+        overflow: hidden;
+    }
+
+        .product-card-home:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1) !important;
+        }
+
+    .img-wrapper {
+        position: relative;
+        overflow: hidden;
+    }
+
+        .img-wrapper img {
+            transition: transform 0.5s ease;
+        }
+
+    .product-card-home:hover .img-wrapper img {
+        transform: scale(1.1);
+    }
+
+    /* Newsletter */
+    .newsletter-section {
+        background: #e8f5e9;
+        border-radius: 30px;
+        border: none !important;
+    }
+
+    .newsletter-input {
+        border-radius: 50px 0 0 50px;
+        padding-left: 25px;
+        border: none;
+    }
+
+    .newsletter-btn {
+        border-radius: 0 50px 50px 0;
+        padding: 0 30px;
+    }
+</style>
+
 <div class="container py-4">
 
-    <div class="p-5 mb-4 bg-light rounded-3 border">
-        <div class="container-fluid py-5">
-            <h1 class="display-5 fw-bold text-success">Trái Cây Tươi Ngon Mỗi Ngày</h1>
-            <p class="col-md-8 fs-4">Mang hương vị thiên nhiên đến ngôi nhà của bạn. Cam kết 100% hữu cơ, an toàn vệ sinh thực phẩm và giao hàng nhanh chóng trong 2h.</p>
-            <a href="#san-pham" class="btn btn-success btn-lg" type="button">Mua Ngay</a>
-        </div>
-    </div>
-    
-    <div class="row align-items-md-stretch mb-5">
-        <div class="col-md-4">
-            <div class="h-100 p-4 text-white bg-success rounded-3">
-                <h2>Tươi 100%</h2>
-                <p>Trái cây được thu hoạch và vận chuyển ngay trong ngày để đảm bảo độ tươi ngon nhất.</p>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="h-100 p-4 bg-light border rounded-3">
-                <h2>Giao Hàng Nhanh</h2>
-                <p>Đội ngũ shipper chuyên nghiệp, cam kết giao hàng nội thành chỉ trong vòng 2 giờ.</p>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="h-100 p-4 bg-light border rounded-3">
-                <h2>Đổi Trả Miễn Phí</h2>
-                <p>Nếu không hài lòng về chất lượng, chúng tôi hỗ trợ đổi trả ngay lập tức không mất phí.</p>
+    <div class="hero-banner text-center shadow-lg">
+        <div class="container py-5">
+            <h1 class="display-3 fw-bold mb-3">Trái Cây Tươi Ngon <br><span class="text-warning">Mỗi Ngày</span></h1>
+            <p class="lead mb-5 opacity-75">Mang hương vị thiên nhiên đến ngôi nhà của bạn. <br>Cam kết 100% hữu cơ, an toàn và giao hàng nhanh.</p>
+            <div class="d-flex justify-content-center gap-3">
+                <a href="#san-pham" class="btn btn-success btn-lg px-5 py-3 rounded-pill fw-bold shadow">
+                    Mua Ngay <i class="fa-solid fa-arrow-right ms-2"></i>
+                </a>
             </div>
         </div>
     </div>
 
+    <div class="row g-4 mb-5">
+        <div class="col-md-4">
+            <div class="feature-box p-4 shadow-sm h-100 text-center">
+                <div class="icon-circle bg-success bg-opacity-10 text-success mx-auto">
+                    <i class="fa-solid fa-leaf fs-3"></i>
+                </div>
+                <h4 class="fw-bold">Tươi 100%</h4>
+                <p class="text-muted mb-0">Thu hoạch và vận chuyển ngay trong ngày để giữ trọn vitamin.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="feature-box p-4 shadow-sm h-100 text-center">
+                <div class="icon-circle bg-warning bg-opacity-10 text-warning mx-auto">
+                    <i class="fa-solid fa-truck-fast fs-3"></i>
+                </div>
+                <h4 class="fw-bold">Giao Hàng Nhanh</h4>
+                <p class="text-muted mb-0">Cam kết giao hàng nội thành chỉ trong vòng 2 giờ đồng hồ.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="feature-box p-4 shadow-sm h-100 text-center">
+                <div class="icon-circle bg-primary bg-opacity-10 text-primary mx-auto">
+                    <i class="fa-solid fa-rotate-left fs-3"></i>
+                </div>
+                <h4 class="fw-bold">Đổi Trả Miễn Phí</h4>
+                <p class="text-muted mb-0">Nếu không hài lòng, chúng tôi hỗ trợ đổi trả ngay lập tức.</p>
+            </div>
+        </div>
+    </div>
 
-    <div id="san-pham" class="mb-4">
-        <h2 class="pb-2 border-bottom mb-4 text-center text-uppercase text-secondary">Sản Phẩm Nổi Bật</h2>
+    <div id="san-pham" class="mb-5 pt-4">
+        <div class="d-flex justify-content-between align-items-end mb-4">
+            <div>
+                <h2 class="fw-bold mb-0">Sản Phẩm Nổi Bật</h2>
+                <p class="text-muted">Lựa chọn tốt nhất cho sức khỏe gia đình bạn</p>
+            </div>
+            <a href="/Products" class="btn btn-link text-success fw-bold text-decoration-none">
+                Xem tất cả <i class="fa-solid fa-angle-right"></i>
+            </a>
+        </div>
 
         <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4">
             @foreach (var product in Model.Products)
@@ -45,66 +145,82 @@
                 var image = product.ProductImages.FirstOrDefault()?.ImageUrl ?? "/images/no-image.png";
 
                 <div class="col">
-                    <div class="card h-100 shadow-sm">
-                        <img src="@image" class="card-img-top" style="height:200px;object-fit:cover">
-
-                        <div class="card-body">
-                            <h6 class="fw-bold text-success">@product.Name</h6>
-                            <p class="small text-muted">@product.Description</p>
-                            <div class="fw-bold text-danger">
-                                @product.Price.ToString("N0") đ / @product.Unit.Name
+                    <div class="card h-100 product-card-home shadow-sm">
+                        <div class="img-wrapper">
+                            <img src="@image" class="card-img-top" style="height:220px; object-fit:cover">
+                            <div class="position-absolute top-0 end-0 m-3">
+                                <button class="btn btn-white btn-sm rounded-circle shadow-sm" title="Yêu thích">
+                                    <i class="fa-regular fa-heart text-danger"></i>
+                                </button>
                             </div>
                         </div>
 
-                        <div class="card-footer bg-white border-0">
-                            <div class="d-grid gap-2">
-                                <a asp-page="/ProductDetail"
-                                   asp-route-id="@product.Id"
-                                   class="btn btn-outline-secondary btn-sm">
-                                    👁 Xem chi tiết
-                                </a>
+                        <div class="card-body p-3">
+                            <h6 class="fw-bold text-dark mb-1">@product.Name</h6>
+                            <p class="small text-muted text-truncate">@product.Description</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="fw-bold text-success fs-5">
+                                    @product.Price.ToString("N0") đ
+                                </span>
+                                <span class="small text-muted">/@product.Unit.Name</span>
+                            </div>
+                        </div>
 
-                                <form method="post" asp-page-handler="BuyNow">
-                                    <input type="hidden" name="id" value="@product.Id" />
-                                    <button class="btn btn-success btn-sm w-100">
-                                        ⚡ Mua ngay
-                                    </button>
-                                </form>
-
-                                <form method="post" asp-page-handler="AddToCart">
-                                    <input type="hidden" name="id" value="@product.Id" />
-                                    <button class="btn btn-outline-success btn-sm w-100">
-                                        🛒 Thêm vào giỏ
-                                    </button>
-                                </form>
+                        <div class="card-footer bg-white border-0 p-3 pt-0">
+                            <div class="row g-2">
+                                <div class="col-12">
+                                    <form method="post" asp-page-handler="BuyNow">
+                                        <input type="hidden" name="id" value="@product.Id" />
+                                        <button class="btn btn-success btn-sm w-100 rounded-pill py-2 fw-bold">
+                                            Mua ngay
+                                        </button>
+                                    </form>
+                                </div>
+                                <div class="col-6">
+                                    <a asp-page="/Products/Detail" asp-route-id="@product.Id"
+                                       class="btn btn-light btn-sm w-100 rounded-pill text-muted">
+                                        Chi tiết
+                                    </a>
+                                </div>
+                                <div class="col-6">
+                                    <form method="post" asp-page-handler="AddToCart">
+                                        <input type="hidden" name="id" value="@product.Id" />
+                                        <button class="btn btn-outline-success btn-sm w-100 rounded-pill">
+                                            + <i class="fa-solid fa-cart-shopping"></i>
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             }
+        </div>
 
-            <nav class="mt-4">
+        @if (Model.TotalPages > 1)
+        {
+            <nav class="mt-5">
                 <ul class="pagination justify-content-center">
-
                     @for (int i = 1; i <= Model.TotalPages; i++)
                     {
                         <li class="page-item @(i == Model.PageIndex ? "active" : "")">
-                            <a class="page-link" asp-route-pageIndex="@i">@i</a>
+                            <a class="page-link border-0 mx-1 rounded shadow-sm" asp-route-pageIndex="@i">@i</a>
                         </li>
                     }
                 </ul>
             </nav>
-        </div>
+        }
     </div>
 
-    <div class="bg-light border rounded-3 p-5 mt-5 text-center">
-        <h3>Đăng ký nhận ưu đãi</h3>
-        <p class="mb-4">Nhận ngay mã giảm giá 10% cho đơn hàng đầu tiên của bạn.</p>
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <form method="post" class="d-flex gap-2">
-                    <input type="email" class="form-control" placeholder="Nhập email của bạn..." required name="email">
-                    <button type="submit" asp-page-handler="Subscribe" class="btn btn-success text-nowrap">Đăng ký</button>
+    <div class="newsletter-section p-5 mt-5 text-center shadow-sm">
+        <div class="row justify-content-center py-3">
+            <div class="col-md-7">
+                <i class="fa-regular fa-paper-plane fs-1 text-success mb-3"></i>
+                <h3 class="fw-bold">Đăng ký nhận ưu đãi</h3>
+                <p class="text-muted mb-4">Nhận ngay mã giảm giá <strong class="text-success">10%</strong> cho đơn hàng đầu tiên và thông báo về trái cây theo mùa.</p>
+                <form method="post" class="input-group mb-2 shadow-sm rounded-pill overflow-hidden">
+                    <input type="email" class="form-control newsletter-input" placeholder="Email của bạn..." required name="email">
+                    <button type="submit" asp-page-handler="Subscribe" class="btn btn-success newsletter-btn fw-bold">Đăng ký ngay</button>
                 </form>
             </div>
         </div>

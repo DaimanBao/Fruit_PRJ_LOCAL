@@ -1,4 +1,247 @@
 ﻿@page
 @model Fruit_PRJ.Pages.Products.IndexModel
-@{
-}
+
+<style>
+    :root {
+        --primary-green: #28a745;
+        --soft-green: #f1f8f4;
+    }
+
+    /* Tinh chỉnh Sidebar Lọc */
+    .filter-card {
+        border: none;
+        border-radius: 15px;
+        position: sticky;
+        top: 20px;
+    }
+
+    .filter-header {
+        background: var(--primary-green) !important;
+        border-radius: 15px 15px 0 0 !important;
+        padding: 1rem;
+    }
+
+    .filter-card .form-control, .filter-card .form-select {
+        border-radius: 10px;
+        border: 1px solid #eee;
+        padding: 0.6rem;
+    }
+
+        .filter-card .form-control:focus {
+            box-shadow: 0 0 0 0.25rem rgba(40, 167, 69, 0.1);
+            border-color: var(--primary-green);
+        }
+
+    /* Product Card hiện đại */
+    .product-card {
+        border: none;
+        border-radius: 20px;
+        transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+        background: #fff;
+    }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.08) !important;
+        }
+
+    .img-container {
+        border-radius: 20px 20px 0 0;
+        overflow: hidden;
+        height: 220px;
+    }
+
+    .product-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+
+    .product-card:hover .product-img {
+        transform: scale(1.1);
+    }
+
+    .category-badge {
+        font-size: 0.7rem;
+        padding: 5px 12px;
+        border-radius: 50px;
+        backdrop-filter: blur(4px);
+        background: rgba(40, 167, 69, 0.85) !important;
+    }
+
+    .product-name {
+        font-size: 1.1rem;
+        color: #2d3436;
+        margin-bottom: 0.3rem;
+    }
+
+    .price-text {
+        color: var(--primary-green);
+        font-size: 1.2rem;
+        font-weight: 800;
+    }
+
+    /* Nút bấm tròn trịa */
+    .btn-action {
+        border-radius: 12px !important;
+        padding: 8px 15px;
+        font-weight: 600;
+        transition: all 0.2s;
+    }
+
+    /* Custom Pagination */
+    .pagination .page-link {
+        border: none;
+        margin: 0 3px;
+        border-radius: 8px !important;
+        color: #555;
+        font-weight: 600;
+    }
+
+    .pagination .page-item.active .page-link {
+        background-color: var(--primary-green);
+        box-shadow: 0 4px 10px rgba(40, 167, 69, 0.3);
+    }
+</style>
+
+<div class="container py-5">
+    <div class="row">
+
+        <div class="col-lg-3 mb-5">
+            <div class="card filter-card shadow-sm">
+                <div class="card-header filter-header text-white fw-bold">
+                    <i class="fa-solid fa-sliders me-2"></i> Khám phá trái cây
+                </div>
+                <div class="card-body p-4">
+                    <form method="get" class="vstack gap-3">
+                        <div>
+                            <label class="small fw-bold text-muted mb-2">Tên sản phẩm</label>
+                            <input name="Keyword" value="@Model.Keyword" class="form-control" placeholder="Tìm tên, loại..." />
+                        </div>
+
+                        <div>
+                            <label class="small fw-bold text-muted mb-2">Danh mục</label>
+                            <select name="CategoryId" class="form-select">
+                                <option value="">Tất cả danh mục</option>
+                                @foreach (var c in Model.Categories)
+                                {
+                                    <option value="@c.Id" selected="@(Model.CategoryId == c.Id)">@c.Name</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="small fw-bold text-muted mb-2">Nguồn gốc</label>
+                            <select name="OriginId" class="form-select">
+                                <option value="">Mọi nơi</option>
+                                @foreach (var o in Model.Origins)
+                                {
+                                    <option value="@o.Id" selected="@(Model.OriginId == o.Id)">@o.Name</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="small fw-bold text-muted mb-2">Khoảng giá (VNĐ)</label>
+                            <div class="input-group mb-2">
+                                <input name="MinPrice" value="@Model.MinPrice" class="form-control form-control-sm" placeholder="Từ" />
+                                <span class="input-group-text bg-white border-0 text-muted">-</span>
+                                <input name="MaxPrice" value="@Model.MaxPrice" class="form-control form-control-sm" placeholder="Đến" />
+                            </div>
+                        </div>
+
+                        <button class="btn btn-success w-100 btn-action mt-2 shadow-sm">
+                            <i class="fa-solid fa-filter me-2"></i> Áp dụng lọc
+                        </button>
+
+                        @if (!string.IsNullOrEmpty(Model.Keyword) || Model.CategoryId != null)
+                        {
+                            <a href="/Products" class="btn btn-link btn-sm text-decoration-none text-muted text-center">Xóa bộ lọc</a>
+                        }
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-9">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h4 class="fw-bold mb-0">Sản phẩm hiện có (@Model.Products.Count)</h4>
+                <div class="small text-muted">Hiển thị trang @Model.PageIndex/@Model.TotalPages</div>
+            </div>
+
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                @foreach (var p in Model.Products)
+                {
+                    var img = p.ProductImages.FirstOrDefault()?.ImageUrl ?? "/no-image.png";
+                    <div class="col">
+                        <div class="card product-card h-100 shadow-sm">
+                            <div class="position-relative img-container">
+                                <img src="@img" class="product-img" alt="@p.Name">
+                                <span class="badge category-badge position-absolute top-0 start-0 m-3 shadow-sm">
+                                    @p.Category.Name
+                                </span>
+                            </div>
+
+                            <div class="card-body px-3 pt-3 pb-0">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div class="overflow-hidden">
+                                        <h6 class="product-name fw-bold text-truncate">@p.Name</h6>
+                                        <p class="small text-muted mb-2">
+                                            <i class="fa-solid fa-location-dot me-1"></i> @p.Origin.Name
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="price-text">
+                                    @p.Price.ToString("N0")<span class="fs-6 fw-normal text-muted">đ/@p.Unit.Name</span>
+                                </div>
+                            </div>
+
+                            <div class="card-footer bg-transparent border-0 p-3 mt-auto">
+                                <div class="row g-2">
+                                    <div class="col-4">
+                                        <a asp-page="/Products/Detail" asp-route-id="@p.Id"
+                                           class="btn btn-outline-secondary btn-action w-100" title="Xem chi tiết">
+                                            <i class="fa-solid fa-eye"></i>
+                                        </a>
+                                    </div>
+                                    <div class="col-8">
+                                        <form method="post" asp-page-handler="AddToCart">
+                                            <input type="hidden" name="id" value="@p.Id" />
+                                            <button class="btn btn-success btn-action w-100">
+                                                <i class="fa-solid fa-cart-plus me-1"></i> Thêm
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            @if (Model.TotalPages > 1)
+            {
+                <nav class="mt-5">
+                    <ul class="pagination justify-content-center">
+                        @for (int i = 1; i <= Model.TotalPages; i++)
+                        {
+                            <li class="page-item @(i == Model.PageIndex ? "active" : "")">
+                                <a class="page-link shadow-sm"
+                                   asp-route-PageIndex="@i"
+                                   asp-route-Keyword="@Model.Keyword"
+                                   asp-route-CategoryId="@Model.CategoryId"
+                                   asp-route-OriginId="@Model.OriginId"
+                                   asp-route-MinPrice="@Model.MinPrice"
+                                   asp-route-MaxPrice="@Model.MaxPrice">
+                                    @i
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </nav>
+            }
+        </div>
+
+    </div>
+</div>
