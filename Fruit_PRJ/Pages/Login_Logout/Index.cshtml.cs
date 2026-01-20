@@ -9,13 +9,16 @@ namespace Fruit_PRJ.Pages.Login_Logout
 {
     public class IndexModel : PageModel
     {
-        // Sử dụng Service dành cho Client
         private readonly AccountClientServices _accountClientService;
 
         public IndexModel(AccountClientServices accountClientService)
         {
             _accountClientService = accountClientService;
         }
+
+        // THÊM THUỘC TÍNH NÀY: Để hứng giá trị từ URL (ví dụ: ?returnUrl=/gio-hang)
+        [BindProperty(SupportsGet = true)]
+        public string? ReturnUrl { get; set; }
 
         [BindProperty] public string Email { get; set; } = string.Empty;
         [BindProperty] public string Password { get; set; } = string.Empty;
@@ -30,9 +33,6 @@ namespace Fruit_PRJ.Pages.Login_Logout
             if (success == true) SuccessMessage = "Đăng ký thành công! Bạn có thể đăng nhập ngay.";
         }
 
-        // Xử lý ĐĂNG NHẬP dành cho Khách hàng
-        // File: Pages/Login_Logout/IndexModel.cshtml.cs
-
         public IActionResult OnPostLogin()
         {
             var result = _accountClientService.LoginCustomer(Email, Password);
@@ -42,13 +42,19 @@ namespace Fruit_PRJ.Pages.Login_Logout
                 return Page();
             }
 
-            // Lưu đầy đủ để trang Checkout dùng luôn
+            // Lưu Session
             HttpContext.Session.SetInt32("CustomerId", result.Account.Id);
             HttpContext.Session.SetString("CustomerName", result.Account.Username);
             HttpContext.Session.SetString("CustomerEmail", result.Account.Email);
             HttpContext.Session.SetInt32("CustomerRole", result.Account.Role);
             HttpContext.Session.SetString("CustomerPhone", result.Account.Phone ?? "");
             HttpContext.Session.SetString("CustomerAddress", result.Account.Address ?? "");
+
+            // SỬA TẠI ĐÂY: Kiểm tra nếu có trang cũ thì quay lại trang đó
+            if (!string.IsNullOrEmpty(ReturnUrl) && Url.IsLocalUrl(ReturnUrl))
+            {
+                return Redirect(ReturnUrl);
+            }
 
             return RedirectToPage("/Index");
         }

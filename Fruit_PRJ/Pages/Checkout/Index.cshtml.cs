@@ -33,7 +33,7 @@ namespace Fruit_PRJ.Pages.Checkout
         {
             if (HttpContext.Session.GetInt32("CustomerId") == null)
             {
-                return RedirectToPage("/Login_Logout/SignIn_SignUp", new { returnUrl = "/thanh-toan" });
+                return RedirectToPage("/Login_Logout/Index", new { returnUrl = "/thanh-toan" });
             }
 
             LoadCart();

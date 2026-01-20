@@ -75,7 +75,8 @@ namespace Fruit_PRJ.Pages.Cart
             if (userId == null)
             {
                 ErrorMessage = "Vui lòng đăng nhập để tiến hành thanh toán!";
-                return RedirectToPage("/Login_Logout/Login", new { returnUrl = "/gio-hang" });
+                // SỬA TẠI ĐÂY: Trỏ đúng vào tên file .cshtml bạn đang có
+                return RedirectToPage("/Login_Logout/Index", new { returnUrl = "/gio-hang" });
             }
 
             // 2. Kiểm tra giỏ hàng có đồ không
