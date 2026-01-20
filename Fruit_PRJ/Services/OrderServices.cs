@@ -39,6 +39,14 @@ namespace Fruit_PRJ.Services
                 .ToList();
         }
 
+        public Order? GetOrderByIdAdmin(int id)
+        {
+            return _context.Orders
+                .Include(o => o.Account)
+                .Include(o => o.OrderItems)
+                .FirstOrDefault(o => o.Id == id);
+        }
+
         public Order? GetOrderByCode(string orderCode, int accountId)
         {
             return _context.Orders
@@ -145,6 +153,35 @@ namespace Fruit_PRJ.Services
                 order.Status = status; 
                 _context.SaveChanges();
             }
+        }
+
+        public List<Order> GetAllOrdersAdmin()
+        {
+            return _context.Orders
+                .Include(o => o.Account)
+                .OrderByDescending(o => o.OrderDate)
+                .ToList();
+        }
+
+        public Dictionary<string, int> GetOrderStatistics()
+        {
+            return new Dictionary<string, int>
+    {
+        { "Total", _context.Orders.Count() },
+        { "Pending", _context.Orders.Count(o => o.Status == 1) },
+        { "Shipping", _context.Orders.Count(o => o.Status == 2) },
+        { "Completed", _context.Orders.Count(o => o.Status == 3) }
+    };
+        }
+
+        public bool AdminUpdateStatus(int orderId, int newStatus)
+        {
+            var order = _context.Orders.Find(orderId);
+            if (order == null) return false;
+
+            order.Status = newStatus;
+            _context.SaveChanges();
+            return true;
         }
     }
 

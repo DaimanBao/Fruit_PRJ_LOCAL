@@ -1,3 +1,5 @@
+using Fruit_PRJ.Models;
+using Fruit_PRJ.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -5,18 +7,32 @@ namespace Fruit_Store_PRJ.Areas.Admin.Pages.Orders
 {
     public class IndexModel : PageModel
     {
-        public void OnGet()
-        {
-            CheckLogin();
+        private readonly OrderServices _orderServices;
 
+        public IndexModel(OrderServices orderServices)
+        {
+            _orderServices = orderServices;
         }
 
-        public void CheckLogin()
+        public List<Order> Orders { get; set; } = new();
+        public Dictionary<string, int> Stats { get; set; } = new();
+
+        public IActionResult OnGet()
         {
             if (HttpContext.Session.GetInt32("AdminId") == null)
-                Response.Redirect("/Admin/LoginAdmin");
+                return RedirectToPage("/LoginAdmin");
+
+            Orders = _orderServices.GetAllOrdersAdmin();
+            Stats = _orderServices.GetOrderStatistics();
+
+            return Page();
         }
 
+        public IActionResult OnPostUpdateStatus(int id, int status)
+        {
+            _orderServices.AdminUpdateStatus(id, status);
+            return RedirectToPage();
+        }
 
     }
 }
