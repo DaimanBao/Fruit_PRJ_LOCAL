@@ -1,78 +1,101 @@
 ﻿@page
 @model Fruit_Store_PRJ.Areas.Admin.Pages.IndexModel
 @{
-    ViewData["Title"] = "Bảng điều khiển";
-}
-@if (TempData["Error"] != null)
-{
-    <div class="alert alert-danger small">
-        @TempData["Error"]
-    </div>
+    ViewData["Title"] = "Bảng điều khiển Admin";
 }
 
+<div class="container-fluid p-0">
+    <div class="mb-4">
+        <h3 class="fw-bold">Tổng quan hệ thống</h3>
+        <p class="text-muted">Chào mừng bạn trở lại, hệ thống đang vận hành ổn định.</p>
+    </div>
 
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <div>
-        <h2 class="text-success fw-bold m-0"><i class="fa-solid fa-chart-line me-2"></i>Tổng quan hệ thống</h2>
-        <p class="text-muted small mb-0">Hôm nay: 04/01/2026 | Chào mừng Quản trị viên trở lại!</p>
-    </div>
-</div>
+    <div class="row g-4 mb-4">
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card border-0 shadow-sm h-100 bg-primary text-white">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-white-50 text-uppercase small">Tổng doanh thu</h6>
+                            <h3 class="mb-0 fw-bold">@Model.TotalRevenue.ToString("N0")đ</h3>
+                        </div>
+                        <div class="bg-white bg-opacity-25 rounded p-3">
+                            <i class="fa-solid fa-sack-dollar fs-3"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-<div class="row g-3 mb-4">
-    <div class="col-md-3">
-        <div class="card border-0 shadow-sm h-100 p-3 bg-primary text-white">
-            <div class="d-flex justify-content-between align-items-center mb-2">
-                <span class="small text-uppercase fw-bold opacity-75">Doanh thu ngày</span>
-                <i class="fa-solid fa-wallet fs-4"></i>
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-muted text-uppercase small">Đơn hàng</h6>
+                            <h3 class="mb-0 fw-bold">@Model.OrderStats["Total"]</h3>
+                        </div>
+                        <div class="bg-success bg-opacity-10 text-success rounded p-3">
+                            <i class="fa-solid fa-cart-shopping fs-3"></i>
+                        </div>
+                    </div>
+                    <div class="mt-3 small">
+                        <span class="text-warning"><i class="fa-solid fa-clock me-1"></i>@Model.OrderStats["Pending"] chờ xử lý</span>
+                    </div>
+                </div>
             </div>
-            <h3 class="fw-bold mb-1">1,250,000đ</h3>
-            <div class="small"><i class="fa-solid fa-arrow-up me-1"></i>12% so với hôm qua</div>
         </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card border-0 shadow-sm h-100 p-3">
-            <div class="d-flex justify-content-between align-items-center mb-2 text-muted">
-                <span class="small text-uppercase fw-bold">Đơn hàng mới</span>
-                <i class="fa-solid fa-cart-shopping fs-4 text-success"></i>
-            </div>
-            <h3 class="fw-bold mb-1 text-dark">45</h3>
-            <div class="small text-success"><i class="fa-solid fa-plus me-1"></i>5 đơn chờ duyệt</div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card border-0 shadow-sm h-100 p-3">
-            <div class="d-flex justify-content-between align-items-center mb-2 text-muted">
-                <span class="small text-uppercase fw-bold">Khách hàng mới</span>
-                <i class="fa-solid fa-user-plus fs-4 text-info"></i>
-            </div>
-            <h3 class="fw-bold mb-1 text-dark">12</h3>
-            <div class="small text-muted">Tổng 1,250 khách hàng</div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card border-0 shadow-sm h-100 p-3">
-            <div class="d-flex justify-content-between align-items-center mb-2 text-muted">
-                <span class="small text-uppercase fw-bold">Sản phẩm sắp hết</span>
-                <i class="fa-solid fa-box-open fs-4 text-danger"></i>
-            </div>
-            <h3 class="fw-bold mb-1 text-dark">08</h3>
-            <div class="small text-danger fw-bold">Cần nhập thêm kho</div>
-        </div>
-    </div>
-</div>
 
-<div class="row g-4">
-    <div class="col-lg-8">
-        <div class="card border-0 shadow-sm">
-            <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
-                <h5 class="fw-bold mb-0">Đơn hàng gần đây</h5>
-                <a asp-page="/Orders/Index" class="btn btn-sm btn-link text-decoration-none p-0">Xem tất cả</a>
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-muted text-uppercase small">Khách hàng</h6>
+                            <h3 class="mb-0 fw-bold">@Model.AccountStats.Total</h3>
+                        </div>
+                        <div class="bg-info bg-opacity-10 text-info rounded p-3">
+                            <i class="fa-solid fa-users fs-3"></i>
+                        </div>
+                    </div>
+                    <div class="mt-3 small">
+                        <span class="text-success"><i class="fa-solid fa-circle me-1"></i>@Model.AccountStats.Active đang hoạt động</span>
+                    </div>
+                </div>
             </div>
-            <div class="card-body p-0">
+        </div>
+
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-muted text-uppercase small">Sản phẩm</h6>
+                            <h3 class="mb-0 fw-bold">@Model.ProductStats.Total</h3>
+                        </div>
+                        <div class="bg-warning bg-opacity-10 text-warning rounded p-3">
+                            <i class="fa-solid fa-box-open fs-3"></i>
+                        </div>
+                    </div>
+                    <div class="mt-3 small">
+                        <span class="text-danger"><i class="fa-solid fa-triangle-exclamation me-1"></i>@Model.ProductStats.OutOfStock hết hàng</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-12 col-lg-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 fw-bold">Đơn hàng mới nhất</h5>
+                    <a asp-page="/Orders/Index" class="btn btn-sm btn-outline-primary">Xem tất cả</a>
+                </div>
                 <div class="table-responsive">
                     <table class="table table-hover align-middle mb-0">
-                        <thead class="bg-light small text-uppercase fw-bold">
-                            <tr>
+                        <thead class="bg-light">
+                            <tr class="small text-uppercase text-muted">
                                 <th class="ps-4">Mã đơn</th>
                                 <th>Khách hàng</th>
                                 <th>Tổng tiền</th>
@@ -81,74 +104,89 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td class="ps-4 fw-bold">#INV-8801</td>
-                                <td>
-                                    <div class="fw-bold small">Nguyễn Văn An</div>
-                                    <div class="text-muted small" style="font-size: 0.7rem;">10 phút trước</div>
-                                </td>
-                                <td class="fw-bold">450,000đ</td>
-                                <td><span class="badge bg-warning-subtle text-warning border border-warning">Chờ xử lý</span></td>
-                                <td class="text-end pe-4">
-                                    <button class="btn btn-sm btn-light border"><i class="fa-solid fa-eye"></i></button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="ps-4 fw-bold">#INV-8799</td>
-                                <td>
-                                    <div class="fw-bold small">Trần Thị Bình</div>
-                                    <div class="text-muted small" style="font-size: 0.7rem;">1 giờ trước</div>
-                                </td>
-                                <td class="fw-bold">1,200,000đ</td>
-                                <td><span class="badge bg-info-subtle text-info border border-info">Đang giao</span></td>
-                                <td class="text-end pe-4">
-                                    <button class="btn btn-sm btn-light border"><i class="fa-solid fa-eye"></i></button>
-                                </td>
-                            </tr>
+                            @foreach (var order in Model.RecentOrders)
+                            {
+                                <tr>
+                                    <td class="ps-4 fw-bold text-primary">#@order.OrderCode</td>
+                                    <td>
+                                        <div class="fw-bold">@order.CustomerName</div>
+                                        <small class="text-muted">@order.OrderDate.ToString("dd/MM/yyyy HH:mm")</small>
+                                    </td>
+                                    <td>@order.TotalAmount.ToString("N0")đ</td>
+                                    <td>
+                                        @if (order.Status == 1)
+                                        {
+                                            <span class="badge bg-warning text-dark">Chờ xử lý</span>
+                                        }
+                                        else if (order.Status == 2)
+                                        {
+
+                                            <span class="badge bg-info">Đang giao</span>
+                                        }
+                                        else if (order.Status == 3)
+                                        {
+
+                                            <span class="badge bg-success">Hoàn thành</span>
+                                        }
+                                        else
+                                        {
+
+                                            <span class="badge bg-danger">Đã hủy</span>
+                                        }
+                                    </td>
+                                    <td class="text-end pe-4">
+                                        <a asp-page="/Orders/OrderDetail" asp-route-id="@order.Id" class="btn btn-sm btn-light border">
+                                            <i class="fa-solid fa-eye"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="col-lg-4">
-        <div class="card border-0 shadow-sm mb-4">
-            <div class="card-header bg-white py-3">
-                <h5 class="fw-bold mb-0">Sản phẩm bán chạy</h5>
-            </div>
-            <div class="card-body">
-                <div class="d-flex align-items-center mb-3">
-                    <img src="https://placehold.co/40x40/orange/white?text=C" class="rounded me-3" alt="">
-                    <div class="flex-grow-1">
-                        <div class="fw-bold small text-dark">Cam Sành Tiền Giang</div>
-                        <div class="text-muted small">Đã bán: 125 kg</div>
+        <div class="col-12 col-lg-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white py-3">
+                    <h5 class="mb-0 fw-bold">Tình trạng kho hàng</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-4">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span class="small">Đang kinh doanh</span>
+                            <span class="fw-bold small">@Model.ProductStats.Selling</span>
+                        </div>
+                        <div class="progress" style="height: 8px;">
+                            <div class="progress-bar bg-success" style="width: @(Model.ProductStats.Total > 0 ? (Model.ProductStats.Selling * 100 / Model.ProductStats.Total) : 0)%"></div>
+                        </div>
                     </div>
-                    <div class="fw-bold text-success">#1</div>
-                </div>
-                <div class="d-flex align-items-center mb-3">
-                    <img src="https://placehold.co/40x40/red/white?text=T" class="rounded me-3" alt="">
-                    <div class="flex-grow-1">
-                        <div class="fw-bold small text-dark">Táo Envy Mỹ</div>
-                        <div class="text-muted small">Đã bán: 84 kg</div>
+                    <div class="mb-4">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span class="small">Hết hàng</span>
+                            <span class="fw-bold small">@Model.ProductStats.OutOfStock</span>
+                        </div>
+                        <div class="progress" style="height: 8px;">
+                            <div class="progress-bar bg-danger" style="width: @(Model.ProductStats.Total > 0 ? (Model.ProductStats.OutOfStock * 100 / Model.ProductStats.Total) : 0)%"></div>
+                        </div>
                     </div>
-                    <div class="fw-bold text-success">#2</div>
-                </div>
-                <hr>
-                <div class="text-center">
-                    <a href="#" class="small text-decoration-none">Xem báo cáo chi tiết</a>
-                </div>
-            </div>
-        </div>
+                    <div class="mb-4">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span class="small">Ngừng kinh doanh</span>
+                            <span class="fw-bold small">@Model.ProductStats.StopSelling</span>
+                        </div>
+                        <div class="progress" style="height: 8px;">
+                            <div class="progress-bar bg-secondary" style="width: @(Model.ProductStats.Total > 0 ? (Model.ProductStats.StopSelling * 100 / Model.ProductStats.Total) : 0)%"></div>
+                        </div>
+                    </div>
 
-        <div class="card border-0 shadow-sm">
-            <div class="card-header bg-white py-3 border-bottom-0">
-                <h5 class="fw-bold mb-0">Thông báo kho</h5>
-            </div>
-            <div class="card-body pt-0">
-                <div class="alert alert-warning border-0 small mb-0">
-                    <i class="fa-solid fa-triangle-exclamation me-2"></i>
-                    Sản phẩm <b>Sầu Riêng Ri6</b> chỉ còn 5kg trong kho.
+                    <hr />
+
+                    <div class="text-center mt-3">
+                        <p class="text-muted small">Thông tin dựa trên danh mục sản phẩm hiện có.</p>
+                        <a asp-page="/Products/Index" class="btn btn-sm btn-dark w-100">Quản lý kho</a>
+                    </div>
                 </div>
             </div>
         </div>
