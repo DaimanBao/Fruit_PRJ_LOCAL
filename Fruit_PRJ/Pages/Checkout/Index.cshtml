@@ -1,0 +1,102 @@
+﻿@page
+@model Fruit_PRJ.Pages.Checkout.IndexModel
+<div class="container py-5">
+
+    <h3 class="fw-bold mb-4">
+        <i class="fa-solid fa-credit-card me-2"></i>Thanh toán
+    </h3>
+
+    <form method="post">
+
+        <div class="row g-4">
+
+            <!-- INFO -->
+            <div class="col-md-6">
+
+                <div class="card shadow-sm">
+                    <div class="card-body">
+
+                        <h6 class="fw-bold mb-3">Thông tin khách hàng</h6>
+
+                        <div class="mb-3">
+                            <label class="form-label">Họ tên</label>
+                            <input asp-for="Order.CustomerName" class="form-control" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Số điện thoại</label>
+                            <input asp-for="Order.CustomerPhone" class="form-control" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Địa chỉ giao hàng</label>
+                            <textarea asp-for="Order.ShippingAddress" class="form-control" rows="3" required></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Ghi chú</label>
+                            <textarea asp-for="Order.Note" class="form-control" rows="2"></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Thanh toán</label>
+                            <select asp-for="Order.PaymentMethod" class="form-select">
+                                <option value="1">Thanh toán khi nhận hàng (COD)</option>
+                                <option value="2">Chuyển khoản ngân hàng</option>
+                                <option value="3">Thanh toán Online (Visa/Mastercard/Stripe)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- CART -->
+            <div class="col-md-6">
+
+                <div class="card shadow-sm">
+                    <div class="card-body">
+
+                        <h6 class="fw-bold mb-3">Đơn hàng</h6>
+
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>SP</th>
+                                    <th>SL</th>
+                                    <th class="text-end">Giá</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var i in Model.CartItems)
+                                {
+                                    <tr>
+                                        <td>@i.Product.Name</td>
+                                        <td>@i.Quantity</td>
+                                        <td class="text-end">@i.SubTotal.ToString("N0") đ</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
+                        <hr />
+
+                        <div class="d-flex justify-content-between fw-bold fs-5">
+                            <span>Tổng</span>
+                            <span class="text-success">@Model.TotalAmount.ToString("N0") đ</span>
+                        </div>
+
+                        <button class="btn btn-success w-100 mt-3">
+                            <i class="fa-solid fa-check me-1"></i> Đặt hàng
+                        </button>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </form>
+
+</div>
